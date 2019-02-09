@@ -2,13 +2,21 @@
  * Allows the webpage to accept and decompress a zip file of Facebook data, recognize the JSON files and read them using
  * JSON.parse(), and then compile all the resulting JSON objects into a single object for export.
  */
-zip.workerScriptsPath = "./lib/";
+zip.workerScriptsPath = "../extraction_prototype/lib/";
 
 let filePicker = document.getElementById("file-picker");
+
+// the function to call on the data, once it's loaded
+var vizData = null;
+let dataCallback = function (d) {
+  vizData = etl(d);
+  renderVisualizations(vizData)
+};
+
 filePicker.addEventListener('change', function () {
-    // First extract the File object from the input form field
-    let zipFileBlob = filePicker.files[0];
-    console.log("Received the file: ", zipFileBlob.name);
+  // First extract the File object from the input form field
+  let zipFileBlob = filePicker.files[0];
+  console.log("Received the file: ", zipFileBlob.name);
 
     // Then create the Reader that will handle extracting the data from that file
     zip.createReader(new zip.BlobReader(zipFileBlob),
@@ -35,23 +43,42 @@ filePicker.addEventListener('change', function () {
 
                     console.log(JSONEntries.length, " JSON entries out of", entries, "total entries.");
 
+                    // this is the mapping from filenames (and their place in
+                    // the directory structure to their json bodies
+                    let filenameJsonMap = {};
+
                     // Then go through that list of only JSON entries and extract the data
                     for (let i = 0; i < JSONEntries.length; i++) {
                         let entry = JSONEntries[i];
+
+                        // Set up the "dirForFile" object, so we can store JSON in there with the callback
+                        const path = entry.filename.split("/");
+                        // all but last element, last element respectively
+                        const directories = path.slice(0, -1);
+                        const filename = path[path.length - 1];
+
                         // Get the raw data from the selected zip entries
                         entry.getData(new zip.TextWriter(),
                             function (text) {
                                 console.log(entry.filename, ": contents acquired!");
+
+                                let pathSoFar = [];
+                                // this will be the dictionary in dirPart that
+                                // corresponds to the directory the file is in
+                                let dirPart = filenameJsonMap;
+                                for (const dir of directories) {
+                                    dirPart[dir] = dirPart[dir] || {};
+                                    dirPart = dirPart[dir];
+                                }
+                                dirPart[filename] = JSON.parse(text);
 
                                 completedJSON++;
                                 if (completedJSON === JSONEntries.length) {
                                     numCompletions++;
                                     console.log("COMPLETE!!!", completedJSON, "out of", JSONEntries.length, "(",
                                         numCompletions, ")");
+                                    dataCallback(filenameJsonMap);
                                 }
-
-                                // TODO -- add JSON to global object
-                                JSON.parse(text);
 
                             }, function (current, total) {
                                 // Used to measure progress of getting data from zip entries

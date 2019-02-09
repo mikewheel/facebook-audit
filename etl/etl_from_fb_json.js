@@ -29,6 +29,8 @@ function etl(fileList) {
        * The messages data visualization requires a sorted list, with each element in the list being
        * an array with two elements, a timestamp and a number of messages happening after that timestamp
        * but before the next timestamp in the list. Timestamps are spaced by one day.
+       * [it is actually a mapping for each user you have messaged to this array format]
+       *
        */
       "messages_viz": etlMessageFrequency(name, messageFiles),
       /*
@@ -59,8 +61,12 @@ function etlMessageFrequency(name, messageFiles) {
   const inbox = messageFiles["inbox"];
 
   Object.keys(inbox).forEach(file => {
+    // Note: this line is here to account for a weird capitalization issue with the filenames.
+    file = file.toLowerCase();
+
     // for each file with messages (corresponds to one group chat/DM)
     const fileContent = inbox[file]["message.json"];
+
     const participants = fileContent["participants"];
     const messages = fileContent["messages"];
     // people other than you
@@ -99,8 +105,8 @@ function timestampsToCounts(mappingTimestamps) {
   Object.keys(mappingTimestamps).forEach(key => {
     countsByDay[key] = {};
     const timestamps = mappingTimestamps[key];
-    timestamps.forEach(t => {
-      countsByDay[key][t] = (countsByDay[key][t] || 0) + 1
+    timestamps.forEach(date => {
+      countsByDay[key][date] = (countsByDay[key][date] || 0) + 1
     })
   });
 
@@ -109,10 +115,10 @@ function timestampsToCounts(mappingTimestamps) {
   Object.keys(countsByDay).forEach(user => {
     countsArr[user] = [];
     Object.keys(countsByDay[user]).forEach(x => {
-      countsArr[user].push([x, countsByDay[user][x]])
+      countsArr[user].push([new Date(Date.parse(x)), countsByDay[user][x]])
     })
+    countsArr[user].sort((e1, e2) => e2[0] - e1[0]);
   });
-
   return countsArr
 }
 
@@ -183,6 +189,9 @@ function etlBirthdays(timeCreated, birthdate, postsOnTL) {
 function etlSearchFrequency(searchFiles) {
   const searchHistory = searchFiles["your_search_history.json"]["searches"];
   const searchesAndTimes = searchHistory.map(search => {
+    if (!search.data) {
+      return false
+    }
     const searchText = search.data[0].text;
     const searchTime = new Date(search.timestamp * 1000);
     const searchDate = new Date(
@@ -191,7 +200,8 @@ function etlSearchFrequency(searchFiles) {
         searchTime.getDate());
 
     return [searchText, searchDate]
-  });
+  }).filter(search => search !== false);
+
 
   const searchTimestamps = {};
   searchesAndTimes.forEach(searchAndTimestamp => {
@@ -199,6 +209,10 @@ function etlSearchFrequency(searchFiles) {
     const timestamp = searchAndTimestamp[1];
     searchTimestamps[search] = searchTimestamps[search] || [];
     searchTimestamps[search].push(timestamp)
+  });
+
+  Object.keys(searchTimestamps).forEach(key => {
+    searchTimestamps[key].sort()
   });
 
   return timestampsToCounts(searchTimestamps);
@@ -349,4 +363,4 @@ const example = {
 };
 
 const out = etl(example);
-console.log(JSON.stringify(out, null, 2));
+// console.log(JSON.stringify(out, null, 2));

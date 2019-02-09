@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <link rel="stylesheet" href="style.css" type="text/css" />
+  <meta charset="UTF-8">
+  <title>Load Your Facebook Data Here</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
-<body onload="renderVisualizations()">
-    <script src="visualization.js"></script>
-    <svg id="messages_viz" class="viz"></svg>
+<body>
+<h1>Upload your zip file here:</h1>
+<form>
+  <input type="file" id="file-picker" accept=".zip, application/zip"/>
+</form>
+<svg id="messages_viz" class="viz"></svg>
+
+<!-- TODO -- Add link to the Facebook download page -->
+<script src="../extraction_prototype/lib/zip.js"></script>
+<script src="../extraction_prototype/lib/z-worker.js"></script>
+<script src="../extraction_prototype/load_facebook_data.js" type="text/javascript"></script>
+<script src="../etl/etl_from_fb_json.js" type="text/javascript"></script>
+<script src="visualization.js"></script>
 </body>
 </html>
