@@ -30,15 +30,12 @@ const dimensions = {
   marginBottom: 40
 };
 
-/*
+/**
  * Function that renders a line chart onto the svg with the given id.
  * This function assumes that an svg with the given id exists
- * Parameters:
- * - id: the id of the svg
- * - keys: array of keys whose data to render
- * - colors: array of colors of each line, corresponding to the keys
- * - title: title of the chart
- * - messageDataObject: The data object
+ * @param id the id of the svg
+ * @param title title of the chart
+ * @param dataObject The data object
  */
 function chart(id, title, dataObject) {
   const messagesData = dataObject["messages_viz"];
@@ -52,7 +49,7 @@ function chart(id, title, dataObject) {
     "rgb(0, 255, 255)"
   ];
 
-  // Sanity checking of inputs
+  // Sort input data
   keys = keys.sort((k1, k2) => {
     function msgCountTotal(k) {
       return messagesData[k].map(e => {
@@ -62,11 +59,7 @@ function chart(id, title, dataObject) {
       })
     }
     return msgCountTotal(k2) - msgCountTotal(k1)
-  }).slice(1, colors.length)
-
-  console.log(keys)
-
-
+  }).slice(1, colors.length);
 
   // Get all dates and all values
   let allDates = [];
@@ -95,8 +88,8 @@ function chart(id, title, dataObject) {
       .range([dimensions.marginLeft, dimensions.width - dimensions.marginRight]);
 
   // Function that scales quantities linearly along the y axis
-  let y = d3.scaleLog()
-      .domain([1, d3.max(allValues)])
+  let y = d3.scaleLinear()
+      .domain([0, d3.max(allValues)])
       .range([dimensions.height - dimensions.marginBottom, dimensions.marginTop]);
 
   // Function that adds attributes to create the x axis group
@@ -118,7 +111,7 @@ function chart(id, title, dataObject) {
   let line = d3.line()
       .defined(d => {
           console.log(d[1]);
-          console.log(y(d[1]));
+          console.log(y(d[1] + 1));
           return true;
       })
       .x(d => x(d[0]))
@@ -142,10 +135,13 @@ function chart(id, title, dataObject) {
       .style("font-family", "Helvetica")
       .text(title);
 
+  const radius = 10;
 
   keys.forEach((key, index) => {
+    let lineGroup = svg.append("g");
+
     // Bind the data and draw the path
-    svg.append("path")
+    lineGroup.append("path")
         .datum(messagesData[key])
         .attr("fill", "none")
         .attr("stroke", colors[index])
@@ -153,8 +149,27 @@ function chart(id, title, dataObject) {
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .attr("d", line);
+
+    lineGroup.selectAll("circle")
+        .data(messagesData[key])
+        .enter()
+        .append("circle")
+        .attr("r", radius)
+        .attr("fill", colors[index])
+        .attr("cx", d => x(d[0]))
+        .attr("cy", d => y(d[1]))
   });
-};
+}
+
+/**
+ * Adds handlers for mouseover and mouseout events and a popup that describes each point
+ */
+function configurePointInteractions(pointSelection, initialRadius, textFunc) {
+    pointSelection.on("mouseover")
+        .transition()
+        .attr("r", initialRadius + 10)
+        .duration(200);
+}
 
 /*
  * Renders all visualizations
