@@ -61,8 +61,12 @@ function etlMessageFrequency(name, messageFiles) {
   const inbox = messageFiles["inbox"];
 
   Object.keys(inbox).forEach(file => {
+    // Note: this line is here to account for a weird capitalization issue with the filenames.
+    file = file.toLowerCase();
+
     // for each file with messages (corresponds to one group chat/DM)
     const fileContent = inbox[file]["message.json"];
+
     const participants = fileContent["participants"];
     const messages = fileContent["messages"];
     // people other than you

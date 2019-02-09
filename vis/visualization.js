@@ -102,7 +102,7 @@ function chart(id, title, dataObject) {
   // Function that adds attributes to create the x axis group
   let xAxis = g => g
       .attr("transform", `translate(0, ${dimensions.height - dimensions.marginBottom})`)
-      .call(d3.axisBottom(x).ticks(numXAxisTicks).tickSizeOuter(0));
+      .call(d3.axisBottom(x).ticks(10).tickSizeOuter(0));
 
   // Function that adds attributes to create the y axis group
   let yAxis = g => g
@@ -116,12 +116,8 @@ function chart(id, title, dataObject) {
 
   // Create line function that is used to draw the path
   let line = d3.line()
-      .x(d => {
-        return x(d[0])
-      })
-      .y(d => {
-        return y(d[1])
-      });
+      .x(d => x(d[0]))
+      .y(d => y(d[1]));
 
   // Add x axis
   svg.append("g")
