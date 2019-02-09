@@ -30,15 +30,12 @@ const dimensions = {
   marginBottom: 40
 };
 
-/*
+/**
  * Function that renders a line chart onto the svg with the given id.
  * This function assumes that an svg with the given id exists
- * Parameters:
- * - id: the id of the svg
- * - keys: array of keys whose data to render
- * - colors: array of colors of each line, corresponding to the keys
- * - title: title of the chart
- * - messageDataObject: The data object
+ * @param id the id of the svg
+ * @param title title of the chart
+ * @param dataObject The data object
  */
 function chart(id, title, dataObject) {
   const messagesData = dataObject["messages_viz"];
@@ -52,7 +49,7 @@ function chart(id, title, dataObject) {
     "rgb(0, 255, 255)"
   ];
 
-  // Sanity checking of inputs
+  // Sort input data
   keys = keys.sort((k1, k2) => {
     function msgCountTotal(k) {
       return messagesData[k].map(e => {
@@ -62,11 +59,7 @@ function chart(id, title, dataObject) {
       })
     }
     return msgCountTotal(k2) - msgCountTotal(k1)
-  }).slice(1, colors.length)
-
-  console.log(keys)
-
-
+  }).slice(1, colors.length);
 
   // Get all dates and all values
   let allDates = [];
