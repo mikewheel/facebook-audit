@@ -13,42 +13,60 @@ filePicker.addEventListener('change', function () {
     // Then create the Reader that will handle extracting the data from that file
     zip.createReader(new zip.BlobReader(zipFileBlob),
         function (reader) {
-            // Get all entries from the zip
+            // Get all entries from the zip file
             reader.getEntries(function (entries) {
-                // If we have entries in our zip file
+                // If there are one or more entries
                 if (entries.length) {
-                    console.log(entries.length, " entries in this zip file.");
-                    let totalJSON = 0;
-                    let completedJSON = 0;
-                    for (let i = 0; i < entries.length; i++) {
 
+                    console.log(entries.length, " entries in this zip file.");
+
+                    let JSONEntries = [];  // List to contain only the JSON entries
+                    let completedJSON = 0;  // Counter for the number of JSON that we've completed
+                    let numCompletions = 0;  // This lets us check that the all-complete condition is met only once
+
+                    // First pull out all the JSON entries in the zip file and store them in a separate list
+                    for (let i = 0; i < entries.length; i++) {
                         let entry = entries[i];
-                        if (!entry.directory && entry.filename.endsWith(".json")
-                            && entry.filename.startsWith("messages/inbox")) {
-                            totalJSON++;
-                            // Get the raw data from the selected zip entries
-                            console.log("Getting the data for entry", i, ":", entry.filename);
-                            entry.getData(new zip.TextWriter(),
-                                function (text) {
-                                    console.log("Text of file", entry.filename, ":");
-                                    JSON.parse(text);
-                                    // TODO -- do something more meaningful with file text
-                                    completedJSON++;
-                                    if (completedJSON === totalJSON) {
-                                        console.log("COMPLETE!!!", completedJSON, "out of", totalJSON);
-                                    }
-                                }, function (current, total) {
-                                    // Used to measure progress of getting data from zip entries
-                                    // For like a progress bar or something
-                                    if (current === total) {
-                                        console.log(entry.filename, ": Progress is ", current, " out of ", total);
-                                    }
-                                }
-                            );
+                        // If that entry is a JSON file
+                        if (!entry.directory && entry.filename.endsWith(".json")) {
+                            JSONEntries.push(entry);
                         }
                     }
+
+                    console.log(JSONEntries.length, " JSON entries out of", entries, "total entries.");
+
+                    // Then go through that list of only JSON entries and extract the data
+                    for (let i = 0; i < JSONEntries.length; i++) {
+                        let entry = JSONEntries[i];
+                        // Get the raw data from the selected zip entries
+                        entry.getData(new zip.TextWriter(),
+                            function (text) {
+                                console.log(entry.filename, ": contents acquired!");
+
+                                completedJSON++;
+                                if (completedJSON === JSONEntries.length) {
+                                    numCompletions++;
+                                    console.log("COMPLETE!!!", completedJSON, "out of", JSONEntries.length, "(",
+                                        numCompletions, ")");
+                                }
+
+                                // TODO -- add JSON to global object
+                                JSON.parse(text);
+
+                            }, function (current, total) {
+                                // Used to measure progress of getting data from zip entries
+                                // Here we write percents to console.
+                                let percent_progress = Math.floor((100 * current) / total);
+                                if (percent_progress % 20 === 0) {
+                                    console.log(entry.filename, ": Progress is ", percent_progress, "% (",
+                                        current, " out of ", total, ")");
+                                }
+                            }
+                        );
+                    }
                 } else {
-                    console.log("No entries in zip file!") // FIXME -- raise error
+                    console.log("No entries in the zip file!");
+                    throw new Error("No entries in zip file!")
                 }
             });
         },
