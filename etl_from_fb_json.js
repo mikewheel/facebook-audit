@@ -126,7 +126,6 @@ function etlBirthdays(timeCreated, birthdate, postsOnTL) {
 
   // your first birthday after making facebook
   const firstBirthday = birthdayOnYearAccountCreated;
-  console.log(firstBirthday)
   if (birthdayOnYearAccountCreated < timeCreated) {
     // in other words, if your birthday in the year your account was created
     // happened before your account (and so no one could wish you happy birthday
@@ -150,6 +149,8 @@ function etlBirthdays(timeCreated, birthdate, postsOnTL) {
 
 
   while (birthdayToCheck < today) {
+    const year = birthdayToCheck.getFullYear();
+
     Object.keys(birthdayWishes).forEach(poster => {
       const postsByPoster = posts.filter(post => {
         return post.title.includes(poster)
@@ -162,10 +163,10 @@ function etlBirthdays(timeCreated, birthdate, postsOnTL) {
             && birthdayToCheck.getDate() === postDate.getDate())
       });
 
-      birthdayWishes[poster].push(postedOnBirthday)
+      birthdayWishes[poster].push([year, postedOnBirthday])
     });
 
-    birthdayToCheck.setFullYear(birthdayToCheck.getFullYear() + 1)
+    birthdayToCheck.setFullYear(year + 1)
   }
 
   return birthdayWishes
