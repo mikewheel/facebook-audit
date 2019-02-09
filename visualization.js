@@ -1,6 +1,6 @@
 
 // Mock Data for testing purposes
-var mockData = {
+const mockData = {
     "messages_viz" : {
         "Sam" : [
             [new Date('Sun, 08 Apr 2018'), 10],
@@ -8,6 +8,13 @@ var mockData = {
             [new Date('Sun, 10 Apr 2018'), 5],
             [new Date('Sun, 11 Apr 2018'), 70],
             [new Date('Sun, 12 Apr 2018'), 100]
+        ],
+        "Dave" : [
+            [new Date('Sun, 09 Apr 2018'), 10],
+            [new Date('Sun, 10 Apr 2018'), 40],
+            [new Date('Sun, 11 Apr 2018'), 2],
+            [new Date('Sun, 12 Apr 2018'), 60],
+            [new Date('Sun, 13 Apr 2018'), 10]
         ]
     }
 };
@@ -17,7 +24,7 @@ var mockData = {
  */
 const dimensions = {
     width: 1000,
-    height: 800,
+    height: 600,
     marginLeft: 50,
     marginRight: 20,
     marginTop: 100,
@@ -29,31 +36,56 @@ const dimensions = {
  * This function assumes that an svg with the given id exists
  * Parameters:
  * - id: the id of the svg
- * - name: name of the person
+ * - keys: array of keys whose data to render
+ * - colors: array of colors of each line, corresponding to the keys
  * - title: title of the chart
  * - messageDataObject: The data object
  */
-function chart(id, name, title, dataObject) {
-    const data = dataObject[name];
+function chart(id, keys, colors, title, dataObject) {
+    // Sanity checking of inputs
+    if (keys.length != colors.length) {
+        throw new Error("keys and colors do not have the same length");
+    }
+
+    // Get all dates and all values
+    let allDates = [];
+    let allValues = [];
+    keys.forEach((key) => {
+       dataObject[key].forEach((entry) => {
+           allDates.push(entry[0]);
+           allValues.push(entry[1]);
+       });
+    });
+
+    // Generates a list of uniqueDates
+    let uniqueDates = [];
+    allDates.forEach((date) => { if (!uniqueDates.includes(date)) uniqueDates.push(date); });
+
+    // Number of ticks on the X Axis
+    let numXAxisTicks = uniqueDates.length;
+
+    // Get range of dates
+    let dateRange = d3.extent(allDates);
 
     // Select and configure svg
     const svg = d3.select('#' + id)
         .attr("width", dimensions.width)
         .attr("height", dimensions.height);
 
-    //
+    // Function that scales time linearly along the x axis
     let x = d3.scaleTime()
-        .domain(d3.extent(data, d => d[0]))
+        .domain(dateRange)
         .range([dimensions.marginLeft, dimensions.width - dimensions.marginRight]);
 
+    // Function that scales quantities linearly along the y axis
     let y = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d[1])])
+        .domain([0, d3.max(allValues)])
         .range([dimensions.height - dimensions.marginBottom, dimensions.marginTop]);
 
     // Function that adds attributes to create the x axis group
     let xAxis = g => g
         .attr("transform", `translate(0, ${dimensions.height - dimensions.marginBottom})`)
-        .call(d3.axisBottom(x).ticks((dimensions.width - (dimensions.marginLeft + dimensions.marginRight)) / 80).tickSizeOuter(0));
+        .call(d3.axisBottom(x).ticks(numXAxisTicks).tickSizeOuter(0));
 
     // Function that adds attributes to create the y axis group
     let yAxis = g => g
@@ -65,6 +97,12 @@ function chart(id, name, title, dataObject) {
             .attr("text-anchor", "start")
             .attr("font-weight", "bold"));
 
+    // Create line function that is used to draw the path
+    let line = d3.line()
+        .defined(d => !isNaN(d[1]))
+        .x(d => x(d[0]))
+        .y(d => y(d[1]));
+
     // Add x axis
     svg.append("g")
         .call(xAxis);
@@ -73,7 +111,7 @@ function chart(id, name, title, dataObject) {
     svg.append("g")
         .call(yAxis);
 
-    // Add title tex
+    // Add title text
     svg.append("text")
         .attr("x", dimensions.width / 2)
         .attr("y", (dimensions.marginTop / 2))
@@ -82,21 +120,17 @@ function chart(id, name, title, dataObject) {
         .style("font-family", "Helvetica")
         .text(title);
 
-    // Create line function that is used to draw the path
-    let line = d3.line()
-        .defined(d => !isNaN(d[1]))
-        .x(d => x(d[0]))
-        .y(d => y(d[1]));
-
-    // Bind the data and draw the path
-    svg.append("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .attr("d", line);
+    keys.forEach((key, index) => {
+        // Bind the data and draw the path
+        svg.append("path")
+            .datum(dataObject[key])
+            .attr("fill", "none")
+            .attr("stroke", colors[index])
+            .attr("stroke-width", 1.5)
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("d", line);
+    });
 };
 
 /*
@@ -104,5 +138,5 @@ function chart(id, name, title, dataObject) {
  */
 function renderVisualizations() {
     // TODO: Import data from ETL stage
-    chart("messages_viz", "Sam", "Messages", mockData.messages_viz);
+    chart("messages_viz", ["Sam", "Dave"], ["blue", "red"], "Messages", mockData.messages_viz);
 }
