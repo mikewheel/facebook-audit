@@ -87,7 +87,7 @@ function etlMessageFrequency(name, messageFiles) {
   Object.keys(messagesSent).forEach(recipient => {
     messagesSent[recipient].sort();
     messagesSent[recipient] = messagesSent[recipient].map(date => {
-      return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+      return new Date(date.getFullYear(), date.getMonth(), 1)
     })
   });
 
@@ -122,11 +122,16 @@ function timestampsToCounts(mappingTimestamps) {
     // fill in the array with zeroes for every missing day
     const timestamps = countsArr[user].map(e => e[0]);
     const day = new Date(timestamps[timestamps.length - 1]);
-    day.setDate(day.getDate() + 1);
+    day.setMonth(day.getMonth() + 1);
 
+    console.log(timestamps)
     while (day < timestamps[0]) {
-      countsArr[user].push([new Date(day), 0])
-      day.setDate(day.getDate() + 1)
+      if (!timestamps.some(date => {
+        return date.getFullYear() == day.getFullYear() && date.getMonth() == day.getMonth()
+      })) {
+        countsArr[user].push([new Date(day), 0]);
+      }
+      day.setMonth(day.getMonth() + 1);
     }
 
     countsArr[user].sort((e1, e2) => e2[0] - e1[0]);
@@ -210,7 +215,7 @@ function etlSearchFrequency(searchFiles) {
     const searchDate = new Date(
         searchTime.getFullYear(),
         searchTime.getMonth(),
-        searchTime.getDate());
+        1);
 
     return [searchText, searchDate]
   }).filter(search => search !== false);
@@ -269,7 +274,7 @@ const example = {
             },
             {
               "sender_name": "Person 1",
-              "timestamp_ms": 1533389390317,
+              "timestamp_ms": 1513159390317,
               "content": "message 1",
               "type": "Generic"
             }
