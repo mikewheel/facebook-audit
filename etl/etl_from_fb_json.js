@@ -1,6 +1,15 @@
 // converts data from facebook's data export format
 // to something we can actually use.
 
+// onmessage: receives a message from the main file with some data to
+// process. This file will process it,a nd then post the processed data back
+onmessage = function(dataFiles) {
+  console.log("received message " + JSON.stringify(dataFiles.data));
+  const processedData = etl(dataFiles.data);
+  console.log("posting back " + JSON.stringify(processedData));
+  postMessage(processedData);
+};
+
 /**
  * Converts the given files into usable json. The output format is a mapping from visualization names
  * to the data that the visualization needs, in the format that the visualization needs.
@@ -124,7 +133,6 @@ function timestampsToCounts(mappingTimestamps) {
     const day = new Date(timestamps[timestamps.length - 1]);
     day.setMonth(day.getMonth() + 1);
 
-    console.log(timestamps)
     while (day < timestamps[0]) {
       if (!timestamps.some(date => {
         return date.getFullYear() == day.getFullYear() && date.getMonth() == day.getMonth()

@@ -6,11 +6,19 @@ zip.workerScriptsPath = "../extraction_prototype/lib/";
 
 let filePicker = document.getElementById("file-picker");
 
+// a worker that can do the ETL tasks in a separate thread.
+const etlWorker = new Worker("../etl/etl_from_fb_json.js");
+
 // the function to call on the data, once it's loaded
-var vizData = null;
 let dataCallback = function (d) {
-  vizData = etl(d);
-  renderVisualizations(vizData)
+  console.log("calling back with " + JSON.stringify(d));
+  etlWorker.postMessage(d)
+};
+
+// bind a handler that will process the worker's response
+etlWorker.onmessage = function(messageEvent) {
+  console.log("received response from worker: " + JSON.stringify(messageEvent));
+  renderVisualizations(messageEvent.data)
 };
 
 filePicker.addEventListener('change', function () {

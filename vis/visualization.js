@@ -77,7 +77,10 @@ function chart(id, title, dataObject) {
   // Get range of dates
   let dateRange = d3.extent(allDates);
 
-  // Select and configure svg
+  // First, wipe the loading animation from the SVG by resetting it's innerHTML
+  document.getElementById(id).innerHTML = "";
+
+  // Then, you can start to select and configure the svg
   const svg = d3.select('#' + id)
       .attr("width", dimensions.width)
       .attr("height", dimensions.height);
