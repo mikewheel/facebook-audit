@@ -30,9 +30,9 @@ filePicker.addEventListener('change', function () {
                             console.log("Getting the data for entry", i, ":", entry.filename);
                             entry.getData(new zip.TextWriter(),
                                 function (text) {
-                                    // TODO -- do something more meaningful with file text
                                     console.log("Text of file", entry.filename, ":");
-                                    console.log(text);
+                                    JSON.parse(text);
+                                    // TODO -- do something more meaningful with file text
                                     completedJSON++;
                                     if (completedJSON === totalJSON) {
                                         console.log("COMPLETE!!!", completedJSON, "out of", totalJSON);
