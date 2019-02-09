@@ -16,11 +16,13 @@ function etl(fileList) {
         profInfo["birthday"]["year"],
         profInfo["birthday"]["month"] - 1,
         profInfo["birthday"]["day"]);
+
     const timeCreated = new Date(profInfo["registration_timestamp"] * 1000);
-    console.log(timeCreated)
+
     const messageFiles = fileList["messages"];
     const adFiles = fileList["ads"];
     const postsOnYourTL = fileList["posts"]["other_people's_posts_to_your_timeline.json"];
+    const searchFiles = fileList["search_history"];
 
     return {
       /*
@@ -28,7 +30,7 @@ function etl(fileList) {
        * an array with two elements, a timestamp and a number of messages happening after that timestamp
        * but before the next timestamp in the list. Timestamps are spaced by one day.
        */
-      "messages_viz": etlMessages(name, messageFiles),
+      "messages_viz": etlMessageFrequency(name, messageFiles),
       /*
        * This is just a simple number: how many advertisers uploaded your email.
        */
@@ -38,7 +40,12 @@ function etl(fileList) {
        * had since you created facebook, of a boolean saying whether they wished
        * you a birthday in that year.
        */
-      "birthdays": etlBirthdays(timeCreated, birthday, postsOnYourTL)
+      "birthdays_viz": etlBirthdays(timeCreated, birthday, postsOnYourTL),
+      /*
+       * This is the same format as messages, but with search frequency instead of
+       * message freq.
+       */
+      "searches_viz": etlSearchFrequency(searchFiles)
     }
   } catch (error) {
     console.log(error);
@@ -46,10 +53,9 @@ function etl(fileList) {
   }
 }
 
-function etlMessages(name, messageFiles) {
+function etlMessageFrequency(name, messageFiles) {
   // a mapping from each recipient to the timestamps of each messages you've sent them (unsorted)
   var messagesSent = {};
-
   const inbox = messageFiles["inbox"];
 
   Object.keys(inbox).forEach(file => {
@@ -79,29 +85,35 @@ function etlMessages(name, messageFiles) {
     })
   });
 
+  return timestampsToCounts(messagesSent)
+}
+
+/**
+ *
+ * @param mappingTimestamps a mapping of some string to timestamps
+ */
+function timestampsToCounts(mappingTimestamps) {
   // at this point, messagesSent is a mapping from each recipient to the timestamp of each message they
   // have received, as a full timestamp
-
-  var messageCounts = {};
-  Object.keys(messagesSent).forEach(recipient => {
-    messageCounts[recipient] = {};
-    const timestamps = messagesSent[recipient];
+  var countsByDay = {};
+  Object.keys(mappingTimestamps).forEach(key => {
+    countsByDay[key] = {};
+    const timestamps = mappingTimestamps[key];
     timestamps.forEach(t => {
-      messageCounts[recipient][t] = (messageCounts[recipient][t] || 0) + 1
+      countsByDay[key][t] = (countsByDay[key][t] || 0) + 1
     })
   });
-
 
   // convert to array
-  var messageCountsArr = {};
-  Object.keys(messageCounts).forEach(user => {
-    messageCountsArr[user] = [];
-    Object.keys(messageCounts[user]).forEach(x => {
-      messageCountsArr[user].push([x, messageCounts[user][x]])
+  var countsArr = {};
+  Object.keys(countsByDay).forEach(user => {
+    countsArr[user] = [];
+    Object.keys(countsByDay[user]).forEach(x => {
+      countsArr[user].push([x, countsByDay[user][x]])
     })
   });
 
-  return messageCountsArr
+  return countsArr
 }
 
 
@@ -117,8 +129,6 @@ function etlNumAdvertisersWithEmail(adsFileList) {
  * @param postsOnTL the posts on your timeline
  */
 function etlBirthdays(timeCreated, birthdate, postsOnTL) {
-  console.log(timeCreated);
-  console.log(birthdate);
   const birthdayOnYearAccountCreated = new Date(
       timeCreated.getFullYear(),
       birthdate.getMonth(),
@@ -139,13 +149,12 @@ function etlBirthdays(timeCreated, birthdate, postsOnTL) {
   // a mapping from people's names to the years they did and did not wish you
   // a happy birthday (or, to simplify, just posted on your wall on your birthday)
   var birthdayWishes = {};
-  const posts = postsOnTL["wall_posts_sent_to_you"]
+  const posts = postsOnTL["wall_posts_sent_to_you"];
 
   posts.forEach(post => {
     const poster = post["title"].split(" wrote on your timeline.")[0];
     birthdayWishes[poster] = birthdayWishes[poster] || []
   });
-
 
 
   while (birthdayToCheck < today) {
@@ -162,14 +171,37 @@ function etlBirthdays(timeCreated, birthdate, postsOnTL) {
             && birthdayToCheck.getMonth() === postDate.getMonth()
             && birthdayToCheck.getDate() === postDate.getDate())
       });
-
       birthdayWishes[poster].push([year, postedOnBirthday])
     });
-
     birthdayToCheck.setFullYear(year + 1)
   }
 
   return birthdayWishes
+}
+
+
+function etlSearchFrequency(searchFiles) {
+  const searchHistory = searchFiles["your_search_history.json"]["searches"];
+  const searchesAndTimes = searchHistory.map(search => {
+    const searchText = search.data[0].text;
+    const searchTime = new Date(search.timestamp * 1000);
+    const searchDate = new Date(
+        searchTime.getFullYear(),
+        searchTime.getMonth(),
+        searchTime.getDate());
+
+    return [searchText, searchDate]
+  });
+
+  const searchTimestamps = {};
+  searchesAndTimes.forEach(searchAndTimestamp => {
+    const search = searchAndTimestamp[0];
+    const timestamp = searchAndTimestamp[1];
+    searchTimestamps[search] = searchTimestamps[search] || [];
+    searchTimestamps[search].push(timestamp)
+  });
+
+  return timestampsToCounts(searchTimestamps);
 }
 
 
@@ -281,8 +313,40 @@ const example = {
         }
       ]
     }
+  },
+  "search_history": {
+    "your_search_history.json": {
+      "searches": [
+        {
+          "timestamp": 1549119643,
+          "data": [
+            {
+              "text": "events"
+            }
+          ],
+          "title": "You searched for events"
+        },
+        {
+          "timestamp": 1549119643,
+          "data": [
+            {
+              "text": "events"
+            }
+          ],
+          "title": "You searched for events"
+        },
+        {
+          "timestamp": 1549119625,
+          "data": [
+            {
+              "text": "thing2"
+            }
+          ],
+          "title": "You searched for thing2"
+        }]
+    }
   }
-}
+};
 
 const out = etl(example);
 console.log(JSON.stringify(out, null, 2));
