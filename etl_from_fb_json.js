@@ -1,93 +1,49 @@
 // converts data from facebook's data export format
 // to something we can actually use.
 
-
-const example = {
-  "profile_information": {
-    "profile_information.json": {
-      "profile": {
-        "name": {
-          "full name": "Julian Zucker"
-        }
-      }
-    }
-  },
-  "messages": {
-    "inbox": {
-      "clairegraves_muxfzb9hsa": {
-        "message.json": {
-          "participants": [
-            {
-              "name": "Person 1"
-            },
-            {
-              "name": "Julian Zucker"
-            }
-          ],
-          "messages": [
-            {
-              "sender_name": "Julian Zucker",
-              "timestamp_ms": 1533389504039,
-              "content": "message1",
-              "type": "Generic"
-            },
-            {
-              "sender_name": "Person 1",
-              "timestamp_ms": 1533389390317,
-              "content": "message 1",
-              "type": "Generic"
-            }
-          ]
-        }
-      }, "arr2_asdfas": {
-        "message.json": {
-          "participants": [
-            {
-              "name": "Person 1"
-            },
-            {
-              "name": "Julian Zucker"
-            },
-            {
-              "name": "Person 2"
-            }
-          ],
-          "messages": [
-            {
-              "sender_name": "Julian Zucker",
-              "timestamp_ms": 1533389504039,
-              "content": "message1",
-              "type": "Generic"
-            },
-            {
-              "sender_name": "Person 1",
-              "timestamp_ms": 1533085150317,
-              "content": "message 1",
-              "type": "Generic"
-            }
-          ]
-        }
-      }
-    }
-  }
-};
-
 /**
  * Converts the given files into usable json. The output format is a mapping from visualization names
  * to the data that the visualization needs, in the format that the visualization needs.
  * @param fileList a dictionary, mapping filenames to file contents (the files from the JSON dump)
+ * @return a mapping from data viz name to data, or false if an error occurred
  */
 function etl(fileList) {
-  // get your name
-  const name = fileList["profile_information"]["profile_information.json"]["profile"]["name"]["full name"];
+  try {
+    // get your name
+    const profInfo = fileList["profile_information"]["profile_information.json"]["profile"];
+    const name = profInfo["name"]["full name"];
+    const birthday = new Date(
+        profInfo["birthday"]["year"],
+        profInfo["birthday"]["month"] - 1,
+        profInfo["birthday"]["day"]);
+    const timeCreated = new Date(profInfo["registration_timestamp"] * 1000);
+    console.log(timeCreated)
+    const messageFiles = fileList["messages"];
+    const adFiles = fileList["ads"];
+    const postsOnYourTL = fileList["posts"]["other_people's_posts_to_your_timeline.json"];
 
-  /*
-   * The messages data visualization requires a sorted list, with each element in the list being
-   * an array with two elements, a timestamp and a number of messages happening after that timestamp
-   * but before the next timestamp in the list. Timestamps are spaced by one day.
-   */
-  const messageFiles = fileList["messages"];
-  return {"messages_viz": etlMessages(name, messageFiles)}
+    return {
+      /*
+       * The messages data visualization requires a sorted list, with each element in the list being
+       * an array with two elements, a timestamp and a number of messages happening after that timestamp
+       * but before the next timestamp in the list. Timestamps are spaced by one day.
+       */
+      "messages_viz": etlMessages(name, messageFiles),
+      /*
+       * This is just a simple number: how many advertisers uploaded your email.
+       */
+      "num_advertisers_with_email": etlNumAdvertisersWithEmail(adFiles),
+      /*
+       * This is a mapping from names of people to an array, for each birthday you've
+       * had since you created facebook, of a boolean saying whether they wished
+       * you a birthday in that year.
+       */
+      "birthdays": etlBirthdays(timeCreated, birthday, postsOnYourTL)
+    }
+  } catch (error) {
+    console.log(error);
+    return false
+  }
 }
 
 function etlMessages(name, messageFiles) {
@@ -148,6 +104,184 @@ function etlMessages(name, messageFiles) {
   return messageCountsArr
 }
 
+
+function etlNumAdvertisersWithEmail(adsFileList) {
+  return adsFileList["advertisers_who_uploaded_a_contact_list_with_your_information.json"]["custom_audiences"].length
+}
+
+/**
+ * For each person who has posted on your timeline for your birthday at least once,
+ * in what years did they post?
+ * @param timeCreated the timestamp when you created facebook
+ * @param birthdate your birthday, a Date object. Only year, month, and day are used.
+ * @param postsOnTL the posts on your timeline
+ */
+function etlBirthdays(timeCreated, birthdate, postsOnTL) {
+  console.log(timeCreated);
+  console.log(birthdate);
+  const birthdayOnYearAccountCreated = new Date(
+      timeCreated.getFullYear(),
+      birthdate.getMonth(),
+      birthdate.getDate());
+
+  // your first birthday after making facebook
+  const firstBirthday = birthdayOnYearAccountCreated;
+  console.log(firstBirthday)
+  if (birthdayOnYearAccountCreated < timeCreated) {
+    // in other words, if your birthday in the year your account was created
+    // happened before your account (and so no one could wish you happy birthday
+    // the year you created your account), add one year
+    firstBirthday.setFullYear(firstBirthday.getFullYear() + 1);
+  }
+
+  var birthdayToCheck = firstBirthday;
+  const today = new Date();
+
+  // a mapping from people's names to the years they did and did not wish you
+  // a happy birthday (or, to simplify, just posted on your wall on your birthday)
+  var birthdayWishes = {};
+  const posts = postsOnTL["wall_posts_sent_to_you"]
+
+  posts.forEach(post => {
+    const poster = post["title"].split(" wrote on your timeline.")[0];
+    birthdayWishes[poster] = birthdayWishes[poster] || []
+  });
+
+
+
+  while (birthdayToCheck < today) {
+    Object.keys(birthdayWishes).forEach(poster => {
+      const postsByPoster = posts.filter(post => {
+        return post.title.includes(poster)
+      });
+
+      const postedOnBirthday = postsByPoster.some(post => {
+        const postDate = new Date(post["timestamp"] * 1000);
+        return (birthdayToCheck.getFullYear() === postDate.getFullYear()
+            && birthdayToCheck.getMonth() === postDate.getMonth()
+            && birthdayToCheck.getDate() === postDate.getDate())
+      });
+
+      birthdayWishes[poster].push(postedOnBirthday)
+    });
+
+    birthdayToCheck.setFullYear(birthdayToCheck.getFullYear() + 1)
+  }
+
+  return birthdayWishes
+}
+
+
+const example = {
+  "profile_information": {
+    "profile_information.json": {
+      "profile": {
+        "name": {
+          "full name": "Julian Zucker"
+        },
+        "birthday": {
+          "year": 1998,
+          "month": 9,
+          "day": 28
+        },
+        "registration_timestamp": 1277515162,
+      }
+    }
+  },
+  "messages": {
+    "inbox": {
+      "person1_muxfzb9hsa": {
+        "message.json": {
+          "participants": [
+            {
+              "name": "Person 1"
+            },
+            {
+              "name": "Julian Zucker"
+            }
+          ],
+          "messages": [
+            {
+              "sender_name": "Julian Zucker",
+              "timestamp_ms": 1533389504039,
+              "content": "message1",
+              "type": "Generic"
+            },
+            {
+              "sender_name": "Person 1",
+              "timestamp_ms": 1533389390317,
+              "content": "message 1",
+              "type": "Generic"
+            }
+          ]
+        }
+      }, "arr2_asdfas": {
+        "message.json": {
+          "participants": [
+            {
+              "name": "Person 1"
+            },
+            {
+              "name": "Julian Zucker"
+            },
+            {
+              "name": "Person 2"
+            }
+          ],
+          "messages": [
+            {
+              "sender_name": "Julian Zucker",
+              "timestamp_ms": 1533389504039,
+              "content": "message1",
+              "type": "Generic"
+            },
+            {
+              "sender_name": "Person 1",
+              "timestamp_ms": 1533085150317,
+              "content": "message 1",
+              "type": "Generic"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "ads": {
+    "advertisers_who_uploaded_a_contact_list_with_your_information.json": {
+      "custom_audiences": [
+        "#1 Cochran",
+        "20th Century Fox Home Entertainment",
+        "8x8",
+        "A and J Motors",
+        "A Star is Born"
+      ]
+    }
+  },
+  "posts": {
+    "other_people's_posts_to_your_timeline.json": {
+      "wall_posts_sent_to_you": [
+        {
+          "timestamp": 1538231759,
+          "data": [
+            {
+              "post": "Happy Birthday!!!"
+            }
+          ],
+          "title": "Person 1 wrote on your timeline."
+        },
+        {
+          "timestamp": 1538181959,
+          "data": [
+            {
+              "post": "Happy Birthday Julian!"
+            }
+          ],
+          "title": "Person 2 wrote on your timeline."
+        }
+      ]
+    }
+  }
+}
 
 const out = etl(example);
 console.log(JSON.stringify(out, null, 2));
