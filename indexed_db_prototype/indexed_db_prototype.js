@@ -9,3 +9,5 @@ function idbOK() {
      */
     return "indexedDB" in window && !/iPad|iPhone|iPod/.test(navigator.platform);
 }
+
+console.log(idbOK());
