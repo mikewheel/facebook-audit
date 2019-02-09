@@ -45,11 +45,11 @@ function chart(id, title, dataObject) {
 
   let keys = Object.keys(messagesData);
   let colors = [
+    "rgb(255, 0, 0)",
+    "rgb(0, 255, 0)",
     "rgb(0, 0, 255)",
-    "rgb(0, 0, 205)",
-    "rgb(0, 0, 155)",
-    "rgb(0, 0, 105)",
-    "rgb(0, 0, 55)"
+    "rgb(255, 0, 255)",
+    "rgb(0, 255, 255)"
   ];
 
   // Sanity checking of inputs
@@ -95,8 +95,8 @@ function chart(id, title, dataObject) {
       .range([dimensions.marginLeft, dimensions.width - dimensions.marginRight]);
 
   // Function that scales quantities linearly along the y axis
-  let y = d3.scaleLinear()
-      .domain([0, d3.max(allValues)])
+  let y = d3.scaleLog()
+      .domain([1, d3.max(allValues)])
       .range([dimensions.height - dimensions.marginBottom, dimensions.marginTop]);
 
   // Function that adds attributes to create the x axis group
@@ -116,8 +116,14 @@ function chart(id, title, dataObject) {
 
   // Create line function that is used to draw the path
   let line = d3.line()
+      .defined(d => {
+          console.log(d[1]);
+          console.log(y(d[1]));
+          return true;
+      })
       .x(d => x(d[0]))
-      .y(d => y(d[1]));
+      .y(d => y(d[1]))
+      .curve(d3.curveMonotoneX);
 
   // Add x axis
   svg.append("g")
