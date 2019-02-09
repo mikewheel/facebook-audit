@@ -118,7 +118,20 @@ function timestampsToCounts(mappingTimestamps) {
       countsArr[user].push([new Date(Date.parse(x)), countsByDay[user][x]])
     })
     countsArr[user].sort((e1, e2) => e2[0] - e1[0]);
+
+    // fill in the array with zeroes for every missing day
+    const timestamps = countsArr[user].map(e => e[0]);
+    const day = new Date(timestamps[timestamps.length - 1]);
+    day.setDate(day.getDate() + 1);
+
+    while (day < timestamps[0]) {
+      countsArr[user].push([new Date(day), 0])
+      day.setDate(day.getDate() + 1)
+    }
+
+    countsArr[user].sort((e1, e2) => e2[0] - e1[0]);
   });
+
   return countsArr
 }
 
@@ -212,7 +225,7 @@ function etlSearchFrequency(searchFiles) {
   });
 
   Object.keys(searchTimestamps).forEach(key => {
-    searchTimestamps[key].sort()
+    searchTimestamps[key].sort();
   });
 
   return timestampsToCounts(searchTimestamps);
@@ -362,5 +375,5 @@ const example = {
   }
 };
 
-const out = etl(example);
-// console.log(JSON.stringify(out, null, 2));
+const out = etl(example)["messages_viz"]
+console.log(JSON.stringify(out, null, 2));
