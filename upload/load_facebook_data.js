@@ -6,15 +6,12 @@ zip.workerScriptsPath = "../upload/lib/";
 
 let filePicker = document.getElementById("file-picker");
 
-// the function to call on the data, once it's loaded
+// The function to call on the data, once it's loaded
 var vizData = null;
 let dataCallback = function (d) {
-  vizData = etl(d);
-  renderVisualizations(vizData);
-};
-
-let indexedDBCallback = function (d) {
-    insertIntoIndexedDB(d);
+  parsedData = etl(d);
+  console.dir(parsedData);
+  //renderVisualizations(vizData);
 };
 
 filePicker.addEventListener('change', function () {
@@ -87,8 +84,7 @@ filePicker.addEventListener('change', function () {
                                     numCompletions++;
                                     // console.log("COMPLETE!!!", completedJSON, "out of", JSONEntries.length, "(",
                                     //     numCompletions, ")");
-                                    indexedDBCallback(filenameJsonMap);
-                                    //dataCallback(filenameJsonMap);
+                                    dataCallback(filenameJsonMap);
                                 }
 
                             }, function (current, total) {

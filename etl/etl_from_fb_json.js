@@ -127,5 +127,5 @@ function parse_profile_info(data) {
 }
 
 function parse_search_history(data) {
-    return data["searches"];
+    return data["your_search_history.json"]["searches"];
 }
