@@ -1,3 +1,31 @@
+/**
+ * Converts the parsed data from etl function to several visualization-specific JavaScript objects.
+ * @param e The event from the completion of parsing the data (etl-complete).
+ */
+function create_visuals(e) {
+  try {
+    let parsedData = e.detail;
+    console.dir(parsedData);
+    var visuals = []; // to be inserted directly in the page, format: [{id: dom}, ...]
+
+
+    // CREATING THE VISUALIZATIONS
+    // visuals.push({
+    //   "num-advertisers": bigStatistic("Number of advertisers individually targeting you",
+    //   parsedData["targeting_advertisers"].length)
+    // });
+
+    // TODO: ACTUALLY CREATE VISUALS
+
+    let event = new CustomEvent("visuals-created", { detail: visuals });
+    document.dispatchEvent(event);
+  } catch (error) {
+    let errorEvent = new CustomEvent("error-triggered", { detail: "Error creating graphics!" });
+    document.dispatchEvent(errorEvent);
+    console.log(JSON.stringify(error));
+  }
+}
+
 // Mock Data for testing purposes
 const mockData = {
   "messages_viz": {
