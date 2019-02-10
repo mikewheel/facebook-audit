@@ -20,22 +20,29 @@ function calculateBarChartXs(n, total, rectWidth, graphWidth, margin) {
 }
 
 /**
- * ordinalBarChart
- *
  * Constructs a bar chart visualization with the given data, header and titles.
  * The independent column is assumed to be a list of text labels, and the dependent column is assumed to be numbers
- * @param id The id of the svg into which to render the visualization
- * @param data Data here is assumed to be
+ * @param data Data here is assumed to be an array of objects of the form { colX: x, colY: y }
  * @param colX The column that is the independent variable
  * @param colY The column that is the dependent variable
- * @param header Header of the graph
- * @param titleX Title of the x axis
- * @param titleY Title of the y axis
- * @param legend Whether or not to include a legend
- *
- * Test: indeterminate
+ * @param color Color of the rectangles
+ * @param header (optional) Header of the graph
+ * @param titleX (optional) Title of the x axis
+ * @param titleY (optional) Title of the y axis
+ * @param legend (optional) Whether or not to include a legend
  */
-function ordinalBarChart(id, data, colX, colY, header, width, height, margin, titleX = "", titleY = "", legend = true) {
+function ordinalBarChart(data, colX, colY, color, header, titleX = "", titleY = "", legend = true) {
+    let width = 600;
+    let height = 400;
+
+    let svg = d3.select(document.createElementNS(svgNS, "svg"));
+
+    svg.attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .classed("svg-content-responsive", true)
+        .attr("_initwidth", width)
+        .attr("_initheight", height);
+
     // ratio between width of graph and width of the whole visualization
     let graphWidthRatio = 0.8;
 
@@ -68,7 +75,8 @@ function ordinalBarChart(id, data, colX, colY, header, width, height, margin, ti
     // Function that adds attributes to create the x axis group
     let xAxis = g => g
         .attr("transform", `translate(0, ${height - margin.bottom})`)
-        .call(d3.axisBottom(x).ticks(numBars).tickSizeOuter(0));
+        .call(d3.axisBottom(x).ticks(numBars).tickSizeOuter(0))
+        .call(g => g.select(".domain").remove());
 
     // Function that adds attributes to create the y axis group
     let yAxis = g => g
@@ -79,19 +87,6 @@ function ordinalBarChart(id, data, colX, colY, header, width, height, margin, ti
     //     .attr("x", 3)
     //     .attr("text-anchor", "start")
     //     .attr("font-weight", "bold"));
-
-    let svg = d3.select("#" + id)
-        .attr("width", width)
-        .attr("height", height);
-
-    // border
-    svg.append("rect")
-        .attr("stroke", "black")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("fill", "white");
 
     // Add graph group
     let graphGroup = svg.append("g");
@@ -126,12 +121,12 @@ function ordinalBarChart(id, data, colX, colY, header, width, height, margin, ti
             return x(d[colX]) - rectWidth / 2;
         })
         .attr("y", d => y(d[colY]))
-        .attr("fill", "lightblue");
+        .attr("fill", color);
 
     if (legend) {
         let legendG = svg.append("g");
-        constructLegend(legendG, legendWidth, [colX], ["lightblue"], margin, width * graphWidthRatio, 0);
+        constructLegend(legendG, legendWidth, [colX], [color], margin, width * graphWidthRatio, 0);
     }
 
-    return svg;
+    return svg.node();
 }

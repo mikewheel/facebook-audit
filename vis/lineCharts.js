@@ -34,6 +34,7 @@ function timeSeriesLineChart(id, data, title) {
                 return c1 + c2
             })
         }
+
         return msgCountTotal(k2) - msgCountTotal(k1)
     }).slice(1, colors.length);
 
@@ -135,3 +136,4 @@ function timeSeriesLineChart(id, data, title) {
             .attr("cx", d => x(d[0]))
             .attr("cy", d => y(d[1]))
     });
+}

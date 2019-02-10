@@ -19,7 +19,7 @@ function bigStatistic(text, number, numColor) {
         .attr("viewBox", `0 0 ${width} ${height}`)
         .classed("svg-content-responsive", true)
         .attr("_initwidth", width)
-        .attr("_initheight", height);;
+        .attr("_initheight", height);
 
 
     svg.append("text")

@@ -28,24 +28,25 @@ let exampleData = [
 ];
 
 function render() {
-/*
+
   // Render
-  ordinalBarChart("viz",
+  let svg = ordinalBarChart(
       exampleData,
       "year",
       "numFriends",
+      FAKEBOOKBLUE,
       "",
-      800,
-      600, margin,
       titleX="",
       titleY="",
-      legend = true);*/
+      legend = false);
+  document.getElementById("insert").appendChild(svg); // This div must also be classed with svg-container
+
 
 /*
   let svg = addBorder(bigStatistic("NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin, 600, 100));
   document.getElementById("insert").appendChild(svg); // This div must also be classed with svg-container
-*/
+
 
   let svg = addBorder(SRSVisual(["hello", "world", "this", "is", "a", "test"], 1));
-  document.getElementById("insert").appendChild(svg); // This div must also be classed with svg-container
+  document.getElementById("insert").appendChild(svg); // This div must also be classed with svg-container */
 }

@@ -9,10 +9,10 @@
  * @type {{top: number, left: number, bottom: number, right: number}}
  */
 let margin = {
-    top: 20,
-    left: 20,
-    bottom: 20,
-    right: 20
+    top: 40,
+    left: 40,
+    bottom: 40,
+    right: 40
 };
 
 /**
