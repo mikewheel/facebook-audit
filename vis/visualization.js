@@ -25,7 +25,17 @@ function create_visuals(e) {
           FAKEBOOKBLUE)
     });
 
-    visuals.push()
+    visuals.push({
+      "ad-interest": bigStatistic("Facebook has guessed your especially likely to click ads in this many groups",
+          parsedData["ad_interests"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "ad-interest": bigStatistic("Facebook has guessed your especially likely to click ads in this many groups",
+          parsedData["ad_interests"].length,
+          FAKEBOOKBLUE)
+    });
 
     // TODO: ACTUALLY CREATE VISUALS
 
