@@ -40,6 +40,11 @@ function unzipFBData(e) {
                     }
 
                     console.log(JSONEntries.length, " JSON entries out of", entries, "total entries.");
+                    if (JSONEntries.length === 0) {
+                        let event = new CustomEvent("error-triggered",
+                            { detail: "No JSON found in zip!" });
+                        document.dispatchEvent(event);
+                    }
 
                     // this is the mapping from filenames (and their place in
                     // the directory structure to their json bodies
