@@ -41,7 +41,7 @@ function displayVizPage(e) {
         
         <div class="row viz-row">
             <div class="col-12">
-                <div id="dollars-per-user" style="font-size: 60px"></div>
+                <div id="dollars-per-user" style="color: lawngreen"></div>
             </div>
         </div>
 
