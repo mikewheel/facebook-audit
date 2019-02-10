@@ -1,6 +1,6 @@
 /**
  * utilities.js
- *
+ * Author: Sam Xifaras
  *
  */
 
@@ -90,7 +90,7 @@ function wrap(text, width) {
 /**
  * Creates a range of natural numbers from 0 to n - 1
  * @param n The number of natural numbers in the range
- * @returns An array of natural numbers in ascending order from 0 to n - 1
+ * @returns Array An array of natural numbers in ascending order from 0 to n - 1
  */
 function natRange(n) {
     if (n == 0) return [];
