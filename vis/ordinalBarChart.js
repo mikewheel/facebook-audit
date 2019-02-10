@@ -40,8 +40,8 @@ function ordinalBarChart(data, colX, colY, color, header, titleX = "", titleY = 
     svg.attr("preserveAspectRatio", "xMinYMin meet")
         .attr("viewBox", `0 0 ${width} ${height}`)
         .classed("svg-content-responsive", true)
-        .attr("_initwidth", width)
-        .attr("_initheight", height);
+        .attr("_initWidth", width)
+        .attr("_initHeight", height);
 
     // ratio between width of graph and width of the whole visualization
     let graphWidthRatio = 0.8;

@@ -104,8 +104,8 @@ function natRange(n) {
 function addBorder(svg) {
     let borderedSvg = d3.select(svg);
 
-    let width = borderedSvg.attr("_initwidth");
-    let height = borderedSvg.attr("_initheight");
+    let width = borderedSvg.attr("_initWidth");
+    let height = borderedSvg.attr("_initHeight");
 
     borderedSvg.append("rect")
         .attr("x", 0)

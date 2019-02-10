@@ -4,6 +4,32 @@
  */
 
 /**
+ * Creates a blank SVG to be shown when there is no data for a visualization
+ */
+function blankSVG() {
+    let svg = d3.select(document.createElementNS(svgNS, "svg"));
+
+    let width = 500;
+    let height = 150;
+
+    svg.attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .classed("svg-content-responsive", true)
+        .attr("_initWidth", width)
+        .attr("_initHeight", height);
+
+    svg.append("text")
+        .text("No data to show")
+        .attr("x", width / 2)
+        .attr("y", height / 2)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("font-size", 16);
+
+    return svg.node();
+}
+
+/**
  * Renders a big statistic
  * @param text Description text
  * @param number The number to render
@@ -20,8 +46,8 @@ function bigStatistic(text, number, numColor, numberOnRight=true) {
     svg.attr("preserveAspectRatio", "xMinYMin meet")
         .attr("viewBox", `0 0 ${width} ${height}`)
         .classed("svg-content-responsive", true)
-        .attr("_initwidth", width)
-        .attr("_initheight", height);
+        .attr("_initWidth", width)
+        .attr("_initHeight", height);
 
     svg.append("text")
         .text(text)
@@ -63,8 +89,8 @@ function SRSVisual(data, numColumns) {
     svg.attr("preserveAspectRatio", "xMinYMin meet")
         .attr("viewBox", `0 0 ${width} ${height}`)
         .classed("svg-content-responsive", true)
-        .attr("_initwidth", width)
-        .attr("_initheight", height);
+        .attr("_initWidth", width)
+        .attr("_initHeight", height);
 
     let padding = 10;
     let fontSize = 20;
