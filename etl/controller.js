@@ -1,29 +1,38 @@
 function main() {
-    return {
-        /*
-       * The messages data visualization requires a sorted list, with each element in the list being
-       * an array with two elements, a timestamp and a number of messages happening after that timestamp
-       * but before the next timestamp in the list. Timestamps are spaced by one day.
-       * [it is actually a mapping for each user you have messaged to this array format]
-       *
-       */
-        "messages_viz": etlMessageFrequency(name, messageFiles),
-        /*
-         * This is just a simple number: how many advertisers uploaded your email.
-         */
-        "num_advertisers_with_email": etlNumAdvertisersWithEmail(adFiles),
-        /*
-         * This is a mapping from names of people to an array, for each birthday you've
-         * had since you created facebook, of a boolean saying whether they wished
-         * you a birthday in that year.
-         */
-        "birthdays_viz": etlBirthdays(timeCreated, birthday, postsOnYourTL),
-        /*
-         * This is the same format as messages, but with search frequency instead of
-         * message freq.
-         */
-        "searches_viz": etlSearchFrequency(searchFiles)
-    }
+
+
+    let filePicker = document.getElementById("file-picker");
+    filePicker.addEventListener('change', unzipFBData);
+    document.addEventListener('unzip-complete', etl);
+
+
+
+
+    // return {
+    //     /*
+    //    * The messages data visualization requires a sorted list, with each element in the list being
+    //    * an array with two elements, a timestamp and a number of messages happening after that timestamp
+    //    * but before the next timestamp in the list. Timestamps are spaced by one day.
+    //    * [it is actually a mapping for each user you have messaged to this array format]
+    //    *
+    //    */
+    //     "messages_viz": etlMessageFrequency(name, messageFiles),
+    //     /*
+    //      * This is just a simple number: how many advertisers uploaded your email.
+    //      */
+    //     "num_advertisers_with_email": etlNumAdvertisersWithEmail(adFiles),
+    //     /*
+    //      * This is a mapping from names of people to an array, for each birthday you've
+    //      * had since you created facebook, of a boolean saying whether they wished
+    //      * you a birthday in that year.
+    //      */
+    //     "birthdays_viz": etlBirthdays(timeCreated, birthday, postsOnYourTL),
+    //     /*
+    //      * This is the same format as messages, but with search frequency instead of
+    //      * message freq.
+    //      */
+    //     "searches_viz": etlSearchFrequency(searchFiles)
+    // }
 }
 
 function etlMessageFrequency(name, messageFiles) {
@@ -351,5 +360,6 @@ const example = {
     }
 };
 
-const out = etl(example)["messages_viz"]
-console.log(JSON.stringify(out, null, 2));
+main();
+//const out = etl(example)["messages_viz"]
+//console.log(JSON.stringify(out, null, 2));
