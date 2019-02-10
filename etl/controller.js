@@ -1,12 +1,19 @@
 function main() {
 
 
+    /**
+     * Visualizes all the data specified in the event.
+     * @param e THe event from the completion of parsing the data (etl-complete).
+     */
+    function init_visualization(e) {
+        let parsed_data = e.detail;
+        console.dir(parsed_data)
+    }
+
     let filePicker = document.getElementById("file-picker");
     filePicker.addEventListener('change', unzipFBData);
     document.addEventListener('unzip-complete', etl);
-
-
-
+    document.addEventListener('etl-complete', init_visualization)
 
     // return {
     //     /*

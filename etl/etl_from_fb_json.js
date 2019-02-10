@@ -12,7 +12,7 @@ function etl(e) {
         let rawData = e.detail;
         console.log(e);
         //console.log(rawData);
-        return {
+        var detail = {
             "ads": parse_ads(rawData["ads"]),
             "apps": parse_apps(rawData["apps_and_websites"]),
             "comments": parse_comments(rawData["comments"]),
@@ -24,10 +24,12 @@ function etl(e) {
             "posts": parse_posts(rawData["posts"]),
             "profile_information": parse_profile_info(rawData["profile_information"]),
             "search_history": parse_search_history(rawData["search_history"])
-        }
+        };
+        let event = new CustomEvent("etl-complete", { detail: detail });
+        document.dispatchEvent(event);
     } catch (error) {
         console.log(error);
-        return false;
+        return false; // TODO: EMIT FAILURE EVENT
     }
 }
 
