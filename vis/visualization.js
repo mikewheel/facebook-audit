@@ -90,7 +90,7 @@ function create_visuals(e) {
           "status",
           "count",
           FAKEBOOKBLUE,
-          "",
+          "Your Responses to Events",
           "",
           "",
           false)
@@ -103,7 +103,7 @@ function create_visuals(e) {
 
     visuals.push({
       "friends-over-time": ordinalBarChart(friendsSplitByYear(parsedData["friends"]["friends"]), "year", "count",
-          FAKEBOOKBLUE, "", "","", false)
+          FAKEBOOKBLUE, "Friends Made per Year", "","", false)
     });
 
     visuals.push({
