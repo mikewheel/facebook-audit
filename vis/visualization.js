@@ -4,6 +4,9 @@
  */
 
 
+const FAKEBOOKBLUE = "#4267b2";
+const svgNS = "http://www.w3.org/2000/svg";
+
 /**
  * Converts the parsed data from etl function to several visualization-specific JavaScript objects.
  * @param e The event from the completion of parsing the data (etl-complete).
@@ -16,10 +19,13 @@ function create_visuals(e) {
 
 
     // CREATING THE VISUALIZATIONS
-    // visuals.push({
-    //   "num-advertisers": bigStatistic("Number of advertisers individually targeting you",
-    //   parsedData["targeting_advertisers"].length)
-    // });
+    visuals.push({
+      "num-advertisers": bigStatistic("Number of advertisers individually targeting you",
+          parsedData["targeting_advertisers"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push()
 
     // TODO: ACTUALLY CREATE VISUALS
 
@@ -31,9 +37,6 @@ function create_visuals(e) {
     console.log(JSON.stringify(error));
   }
 }
-
-const FAKEBOOKBLUE = "#4267b2";
-const svgNS = "http://www.w3.org/2000/svg";
 
 let exampleData = [
     {
