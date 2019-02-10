@@ -33,110 +33,110 @@ function displayVizPage(e) {
     eraseMain();
     let main = document.getElementById("main");
     let vizTemplateHTML = `
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="advertisers-count"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="ad-category-count"></div>
           </div>
         </div>
 
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="ad-category-srs"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="time-on-platform"></div>
           </div>
         </div>
 
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="reactions-count"></div>
           </div>
         </div>
 
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="comments-count"></div>
           </div>
         </div>
 
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="posts-count"></div>
           </div>
         </div>
 
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="messages-count"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="messages-srs"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="friends-count"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div class="svg-container" id="friends-over-time"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="apps-count"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="apps-srs"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="group-membership-count"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div class="svg-container" id="event-attendance"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="former-friends"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12">
             <div id="rejected-friend-requests"></div>
           </div>
         </div>
         
-        <div class="row">
+        <div class="row viz-row">
           <div class="col-12" id="conclusion">
             <h3>Would you like to <a href="https://www.facebook.com/help/delete_account/">delete your account?</a></h3>
             <p>Created by  Daniel Rassaby, Sam Xifaras, Michael Wheeler, and Julian Zucker</p>

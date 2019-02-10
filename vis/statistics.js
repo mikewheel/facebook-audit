@@ -67,6 +67,9 @@ function bigStatistic(text, number, numColor, numberOnRight=true) {
 function SRSVisual(data, numColumns) {
     let div = d3.select(document.createElement("div"));
 
+    div.append("h5")
+        .text("Examples of above:");
+
     div.append("ul")
         .classed("list-group", true)
         .selectAll("li").data(data).enter()

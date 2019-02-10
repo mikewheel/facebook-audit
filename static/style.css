@@ -33,7 +33,7 @@ svg.viz {
     display: inline-block;
     position: relative;
     width: 100%;
-    padding-bottom: 100%; /* aspect ratio */
+    padding-bottom: 85%; /* aspect ratio */
     vertical-align: top;
     overflow: hidden;
 }
@@ -42,4 +42,8 @@ svg.viz {
     position: absolute;
     top: 10px;
     left: 0;
+}
+
+.viz-row {
+    padding: 1.25em;
 }
