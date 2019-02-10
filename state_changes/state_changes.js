@@ -33,55 +33,64 @@ function displayVizPage(e) {
     eraseMain();
     let main = document.getElementById("main");
     let vizTemplateHTML = `
-        <div class="svg-container" id="advertisers-count"></div>
-        <div class="svg-container" id="ad-category-count"></div>
-
-        
         <div class="row">
-          <div class="col-12" >
-            <div class="svg-container" id="ad-category-srs"></div>
+          <div class="col-12">
+            <div id="advertisers-count"></div>
           </div>
         </div>
         
         <div class="row">
           <div class="col-12">
-            <div class="svg-container" id="time-on-platform"></div>
+            <div id="ad-category-count"></div>
           </div>
         </div>
 
+        
         <div class="row">
           <div class="col-12">
-            <div class="svg-container" id="reactions-count"></div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12">
-            <div class="svg-container" id="comments-count"></div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12">
-            <div class="svg-container" id="posts-count"></div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-12">
-            <div class="svg-container" id="messages-count"></div>
+            <div id="ad-category-srs"></div>
           </div>
         </div>
         
         <div class="row">
           <div class="col-12">
-            <div class="svg-container" id="messages-srs"></div>
+            <div id="time-on-platform"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div id="reactions-count"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div id="comments-count"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div id="posts-count"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <div id="messages-count"></div>
           </div>
         </div>
         
         <div class="row">
           <div class="col-12">
-            <div class="svg-container" id="friends-count"></div>
+            <div id="messages-srs"></div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-12">
+            <div id="friends-count"></div>
           </div>
         </div>
         
@@ -93,19 +102,19 @@ function displayVizPage(e) {
         
         <div class="row">
           <div class="col-12">
-            <div class="svg-container" id="apps-count"></div>
+            <div id="apps-count"></div>
           </div>
         </div>
         
         <div class="row">
           <div class="col-12">
-            <div class="svg-container" id="apps-srs"></div>
+            <div id="apps-srs"></div>
           </div>
         </div>
         
         <div class="row">
           <div class="col-12">
-            <div class="svg-container" id="group-membership-count"></div>
+            <div id="group-membership-count"></div>
           </div>
         </div>
         
@@ -117,13 +126,13 @@ function displayVizPage(e) {
         
         <div class="row">
           <div class="col-12">
-            <div class="svg-container" id="former-friends"></div>
+            <div id="former-friends"></div>
           </div>
         </div>
         
         <div class="row">
           <div class="col-12">
-            <div class="svg-container" id="rejected-friend-requests"></div>
+            <div id="rejected-friend-requests"></div>
           </div>
         </div>
         

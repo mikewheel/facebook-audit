@@ -38,37 +38,21 @@ function blankSVG() {
  *   invert it.
  */
 function bigStatistic(text, number, numColor, numberOnRight=true) {
-    let svg = d3.select(document.createElementNS(svgNS, "svg"));
+    let div = d3.select(document.createElement("div"));
 
-    let width = 500;
-    let height = 150;
+    div.classed("d-flex", true)
+        .classed("justify-content-between", true);
 
-    svg.attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", `0 0 ${width} ${height}`)
-        .classed("svg-content-responsive", true)
-        .attr("_initWidth", width)
-        .attr("_initHeight", height);
+    div.append("h4")
+        .text(text);
 
-    svg.append("text")
-        .text(text)
-        .attr("x", numberOnRight ? margin.left : width - margin.right)
-        .attr("y", height / 2)
-        .attr("text-anchor", numberOnRight ? "start" : "end")
-        .attr("dominant-baseline", "central")
-        .attr("font-size", 16)
-        .attr("textLength", (2 * width) / 3);
+    div.append("p")
+        .text(number)
+        .style("font-size", "3em")
+        .style("color", "#4267b2");
 
-    svg.append("text")
-        .text(number.toString())
-        .attr("x", numberOnRight ? width - margin.right : margin.left)
-        .attr("y", height / 2)
-        .attr("text-anchor", numberOnRight ? "end" : "start")
-        .attr("dominant-baseline", "central")
-        .attr("font-size", 40)
-        .attr("font-weight", "bold")
-        .attr("fill", numColor);
 
-    return svg.node();
+    return div.node();
 }
 
 
@@ -81,57 +65,16 @@ function bigStatistic(text, number, numColor, numberOnRight=true) {
  * Test: passing
  */
 function SRSVisual(data, numColumns) {
-    let svg = d3.select(document.createElementNS(svgNS, "svg"));
+    let div = d3.select(document.createElement("div"));
 
-    let width = 600;
-    let height = 400;
+    div.append("ul")
+        .classed("list-group", true)
+        .selectAll("li").data(data).enter()
+        .append("li")
+          .classed("list-group-item", true)
+          .html(function (d) {
+              return d;
+          });
 
-    svg.attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", `0 0 ${width} ${height}`)
-        .classed("svg-content-responsive", true)
-        .attr("_initWidth", width)
-        .attr("_initHeight", height);
-
-    let padding = 10;
-    let fontSize = 20;
-
-    let numRows = Math.ceil(data.length / numColumns);
-    let rowHeight = height / numRows;
-
-    let columnWidth = width / numColumns;
-    let textWidthConstraint = columnWidth - (2 * padding);
-
-    console.log(numColumns, numRows);
-
-    let x = d3.scaleOrdinal()
-        .domain(natRange(numColumns))
-        .range(natRange(numColumns).map(i => (columnWidth / 2) + i * columnWidth));
-
-    let y = d3.scaleOrdinal()
-        .domain(natRange(numRows))
-        .range(natRange(numRows).map(i => (rowHeight / 2) + i * rowHeight))
-
-    svg.selectAll("text")
-        .data(data)
-        .enter()
-        .append("text")
-        .attr("x", (d, i) => x(i % numColumns))
-        .attr("y", (d, i) => y(Math.floor(i / numColumns)))
-        .style("opacity", 0.0)
-        .attr("font-size", 0)
-        .attr("fill", "black")
-        .attr("text-anchor", "middle")
-        .text(d => d)
-        //.call(wrap, columnWidth) TODO: Find out how to do text wrapping
-        .transition("opacity")
-        .duration(500)
-        .delay((d, i) => i * 100)
-        .style("opacity", 1.0)
-        .transition("fontSize")
-        .ease(d3.easeBounce)
-        .duration(1000)
-        .delay((d, i) => i * 100)
-        .attr("font-size", fontSize);
-
-    return svg.node();
+    return div.node();
 }
