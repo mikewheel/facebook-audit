@@ -29,6 +29,18 @@ function create_visuals(e) {
 
     // TODO: ACTUALLY CREATE VISUALS
 
+    visuals.push({
+      "apps": bigStatistic("NUMBER OF APPS YOU HAVE LINKED TO FACEBOOK",
+          parsedData["apps"].length)
+    });
+
+    visuals.push({
+      "friends": bigStatistic("friends",
+          parsedData["friends"],
+          FAKEBOOKBLUE,
+          false)
+    });
+
     let event = new CustomEvent("visuals-created", { detail: visuals });
     document.dispatchEvent(event);
   } catch (error) {

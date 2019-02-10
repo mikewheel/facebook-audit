@@ -10,7 +10,7 @@ function etl(e) {
     try {
         let rawData = e.detail;
         console.log(e);
-        //console.log(rawData);
+        console.log(rawData);
         var detail = {
             "ads": parse_ads(rawData["ads"]),
             "apps": parse_apps(rawData["apps_and_websites"]),
@@ -27,6 +27,7 @@ function etl(e) {
         let event = new CustomEvent("etl-complete", { detail: detail });
         document.dispatchEvent(event);
     } catch (error) {
+        throw error;
         let errorEvent = new CustomEvent("error-triggered", { detail: "Error parsing data!" });
         document.dispatchEvent(errorEvent);
         console.log(JSON.stringify(error));
