@@ -34,17 +34,30 @@ function etl(e) {
     }
 }
 
+function get(data, args) {
+    var intermed = data;
+    args.forEach(function (arg) {
+        if (intermed.hasOwnProperty(arg)) {
+            intermed = intermed[arg];
+        } else {
+            return {}
+        }
+    });
+    console.log(intermed)
+    return intermed;
+}
+
 function parse_ads(data) {
     return {
-        "ad_interests": data["ads_interests.json"]["topics"],
-        "targeting_advertisers": data["advertisers_who_uploaded_a_contact_list_with_your_information.json"]
-            ["custom_audiences"]
+        "ad_interests": get(data, ["ads_interests.json", "topics"]),
+        "targeting_advertisers": get(data, ["advertisers_who_uploaded_a_contact_list_with_your_information.json",
+            "custom_audiences"])
     }
 }
 
 function parse_apps(data) {
     let installedAppsList = [];
-    data["apps_and_websites.json"]["installed_apps"].forEach(function (app) {
+    get(data, ["apps_and_websites.json", "installed_apps"]).forEach(function (app) {
         installedAppsList.push(app["name"])
     });
     return installedAppsList;
@@ -52,10 +65,10 @@ function parse_apps(data) {
 
 function parse_comments(data) {
     let commentsList = [];
-    data["comments.json"]["comments"].forEach(function (comment) {
+    get(data, ["comments.json", "comments"]).forEach(function (comment) {
         commentsList.push({
-            "timestamp": comment["timestamp"],
-            "comment": comment["data"][0]["comment"]["comment"]
+            "timestamp": get(comment, ["timestamp"]),
+            "comment": get(comment, ["data", 0, "comment", "comment"])
         })
     });
     return commentsList;
@@ -63,31 +76,31 @@ function parse_comments(data) {
 
 function parse_events(data) {
     return {
-        "hosted": data["your_events.json"]["your_events"],
-        "invited": data["event_invitations.json"]["events_invited"],
-        "accepted": data["your_event_responses.json"]["event_responses"]["events_joined"],
-        "interested": data["your_event_responses.json"]["event_responses"]["events_interested"],
-        "declined": data["your_event_responses.json"]["event_responses"]["events_declined"],
+        "hosted": get(data, ["your_events.json", "your_events"]),
+        "invited": get(data, ["event_invitations.json", "events_invited"]),
+        "accepted": get(data, ["your_event_responses.json", "event_responses", "events_joined"]),
+        "interested": get(data, ["your_event_responses.json", "event_responses", "events_interested"]),
+        "declined": get(data, ["your_event_responses.json", "event_responses", "events_declined"]),
     };
 }
 
 function parse_friends(data) {
     return {
-        "friends": data["friends.json"]["friends"],
-        "former_friends": data["removed_friends.json"]["deleted_friends"],
-        "requests_you_rejected": data["rejected_friend_requests.json"]["rejected_requests"],
+        "friends": get(data, ["friends.json", "friends"]),
+        "former_friends": get(data, ["removed_friends.json", "deleted_friends"]),
+        "requests_you_rejected": get(data, ["rejected_friend_requests.json", "rejected_requests"]),
     };
 }
 
 function parse_groups(data) {
     return {
-        "group_memberships": data["your_group_membership_activity.json"]["groups_joined"]
+        "group_memberships": get(data, ["your_group_membership_activity.json", "groups_joined"])
     }
 }
 
 function parse_reactions(data) {
     // Look for the reactions list within the global data object.
-    let reactionsList = data["posts_and_comments.json"]["reactions"];
+    let reactionsList = get(data, ["posts_and_comments.json", "reactions"]);
     let cleanedReactionsList = [];
 
     // Parse all reactions and store them using the transaction
@@ -95,14 +108,14 @@ function parse_reactions(data) {
         // Parse data into a nice format
         let cleaned_reaction = {
             "timestamp": new Date(reaction["timestamp"] * 1000),
-            "reaction": reaction["data"][0]["reaction"]["reaction"]
+            "reaction": get(reaction, ["data", 0, "reaction", "reaction"])
         };
         cleanedReactionsList.push(cleaned_reaction)
     });
 
     return {
         "posts_and_comments": cleanedReactionsList,
-        "pages": data["pages.json"]["page_likes"]
+        "pages": get(data, ["pages.json", "page_likes"])
     }
 }
 
@@ -113,7 +126,7 @@ function parse_messages(data) {
         if (data.hasOwnProperty(dir)) {
             for (let convoName in data[dir]) {
                 if (data[dir].hasOwnProperty(convoName)) {
-                    let personalMessages = data[dir][convoName]["message.json"]["messages"];
+                    let personalMessages = get(data, [dir, convoName, "message.json", "messages"]);
                     personalMessages.forEach(function (messageObject) {
                         messages.push(messageObject);
                     });
@@ -125,13 +138,13 @@ function parse_messages(data) {
 }
 
 function parse_posts(data) {
-    return data["your_posts.json"]["status_updates"];
+    return get(data, ["your_posts.json", "status_updates"]);
 }
 
 function parse_profile_info(data) {
-    return data["profile_information.json"];
+    return get(data, ["profile_information.json"]);
 }
 
 function parse_search_history(data) {
-    return data["your_search_history.json"]["searches"];
+    return get(data, ["your_search_history.json", "searches"]);
 }
