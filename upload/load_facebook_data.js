@@ -93,18 +93,21 @@ function unzipFBData(e) {
                                 //     console.log(entry.filename, ": Progress is ", percent_progress, "% (",
                                 //         current, " out of ", total, ")");
                                 // }
-                                return;
+                                //return;
                             }
                         );
                     }
                 } else {
                     console.log("No entries in the zip file!");
-                    throw new Error("No entries in zip file!")
+                    let errorEvent = new CustomEvent("error-triggered",
+                        { detail: "No entries were contained in the zip file!" });
+                    document.dispatchEvent(errorEvent);
                 }
             });
         },
         function (error) {
-            console.log("Could not read in ZIP file!");
+            let errorEvent = new CustomEvent("error-triggered", { detail: "Could not read in ZIP file!" });
+            document.dispatchEvent(errorEvent);
             console.log(JSON.stringify(error));
         });
 };

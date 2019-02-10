@@ -28,8 +28,9 @@ function etl(e) {
         let event = new CustomEvent("etl-complete", { detail: detail });
         document.dispatchEvent(event);
     } catch (error) {
-        console.log(error);
-        return false; // TODO: EMIT FAILURE EVENT
+        let errorEvent = new CustomEvent("error-triggered", { detail: "Error parsing data!" });
+        document.dispatchEvent(errorEvent);
+        console.log(JSON.stringify(error));
     }
 }
 
