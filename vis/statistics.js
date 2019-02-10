@@ -14,7 +14,7 @@ function bigStatistic(id, text, number, numColor, margin) {
     let svg = d3.select("#" + id);
 
     let width = svg.attr("width");
-    let height = svg.attr("height")
+    let height = svg.attr("height");
 
     // border
     svg.append("rect")
@@ -51,7 +51,45 @@ function bigStatistic(id, text, number, numColor, margin) {
  * @param id The id of the svg tag into which to render the visual
  * @param data An array of strings to render
  * @param margin A margin object
+ * @param numColumns Number of columns to organize the entries into
  */
-function SRSVisual(id, data, margin) {
+function SRSVisual(id, data, margin, numColumns) {
+    let padding = 10;
     let svg = d3.select("#" + id);
+
+    let fontSize = 16;
+
+    let width = svg.attr("width");
+    let height = svg.attr("height");
+
+    let numRows = Math.ceil(data.length / numColumns)
+    let rowHeight = height / numRows;
+
+    let columnWidth = width / numColumns;
+    let textWidthConstraint = columnWidth - (2 * padding);
+
+    let x = d3.scaleOrdinal()
+        .domain(natRange(numColumns))
+        .range(natRange(numColumns).map(i => (columnWidth / 2) + i * columnWidth));
+
+    let y = d3.scaleOrdinal()
+        .domain(natRange(numRows))
+        .range(natRange(numRows).map(i => (rowHeight / 2) + i * rowHeight))
+
+    svg.selectAll("text")
+        .data(data)
+        .enter()
+        .append("text")
+        .attr("x", (d, i) => x(i % numColumns))
+        .attr("y", (d, i) => y(Math.floor(i / numColumns)))
+        .style("opacity", 0.0)
+        .style("font-size", 20)
+        .attr("fill", "black")
+        .attr("text-anchor", "middle")
+        .text(d => d)
+        .transition()
+        .duration(1000)
+        .delay((d, i) => i * 100)
+        .style("opacity", 1.0);
+        //.style("font-size", fontSize);
 }

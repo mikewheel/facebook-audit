@@ -19,16 +19,6 @@ function calculateBarChartXs(n, total, rectWidth, graphWidth, margin) {
 }
 
 /**
- * Creates a range of natural numbers from 0 to n - 1
- * @param n The number of natural numbers in the range
- * @returns An array of natural numbers in ascending order from 0 to n - 1
- */
-function natRange(n) {
-    if (n == 0) return [];
-    else return natRange(n - 1).concat([n - 1]);
-}
-
-/**
  * ordinalBarChart
  *
  * Constructs a bar chart visualization with the given data, header and titles.

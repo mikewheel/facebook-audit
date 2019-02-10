@@ -52,7 +52,9 @@ function render() {
       titleY="",
       legend = true);*/
 
-  bigStatistic("stat-ads", "NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin);
+  //bigStatistic("stat-ads", "NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin);
+
+  SRSVisual("stat-ads", ["hello", "world", "this", "is", "a", "test"], margin, 4);
 }
 
 
