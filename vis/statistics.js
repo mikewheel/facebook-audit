@@ -4,12 +4,9 @@
  */
 
 /**
- * Renders a big statistic
- * @param text Description text
- * @param number The number to render
- * @param numColor Color of the number to render
+ * Creates a blank SVG to be shown when there is no data for a visualization
  */
-function bigStatistic(text, number, numColor) {
+function blankSVG() {
     let svg = d3.select(document.createElementNS(svgNS, "svg"));
 
     let width = 500;
@@ -18,24 +15,54 @@ function bigStatistic(text, number, numColor) {
     svg.attr("preserveAspectRatio", "xMinYMin meet")
         .attr("viewBox", `0 0 ${width} ${height}`)
         .classed("svg-content-responsive", true)
-        .attr("_initwidth", width)
-        .attr("_initheight", height);
+        .attr("_initWidth", width)
+        .attr("_initHeight", height);
 
+    svg.append("text")
+        .text("No data to show")
+        .attr("x", width / 2)
+        .attr("y", height / 2)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("font-size", 16);
+
+    return svg.node();
+}
+
+/**
+ * Renders a big statistic
+ * @param text Description text
+ * @param number The number to render
+ * @param numColor Color of the number to render
+ * @param numberOnRight By default the text is rendered to the left and the number to the right. Set this to false to
+ *   invert it.
+ */
+function bigStatistic(text, number, numColor, numberOnRight=true) {
+    let svg = d3.select(document.createElementNS(svgNS, "svg"));
+
+    let width = 500;
+    let height = 150;
+
+    svg.attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .classed("svg-content-responsive", true)
+        .attr("_initWidth", width)
+        .attr("_initHeight", height);
 
     svg.append("text")
         .text(text)
-        .attr("x", margin.left)
+        .attr("x", numberOnRight ? margin.left : width - margin.right)
         .attr("y", height / 2)
-        .attr("text-anchor", "start")
+        .attr("text-anchor", numberOnRight ? "start" : "end")
         .attr("dominant-baseline", "central")
         .attr("font-size", 16)
         .attr("textLength", (2 * width) / 3);
 
     svg.append("text")
         .text(number.toString())
-        .attr("x", width - margin.right)
+        .attr("x", numberOnRight ? width - margin.right : margin.left)
         .attr("y", height / 2)
-        .attr("text-anchor", "end")
+        .attr("text-anchor", numberOnRight ? "end" : start)
         .attr("dominant-baseline", "central")
         .attr("font-size", 40)
         .attr("font-weight", "bold")
@@ -62,8 +89,8 @@ function SRSVisual(data, numColumns) {
     svg.attr("preserveAspectRatio", "xMinYMin meet")
         .attr("viewBox", `0 0 ${width} ${height}`)
         .classed("svg-content-responsive", true)
-        .attr("_initwidth", width)
-        .attr("_initheight", height);
+        .attr("_initWidth", width)
+        .attr("_initHeight", height);
 
     let padding = 10;
     let fontSize = 20;
