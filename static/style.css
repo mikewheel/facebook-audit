@@ -1,5 +1,6 @@
 html, body {
     min-height: 100vh;
+    font-family: Lato;
 }
 
 header, footer {
@@ -17,6 +18,10 @@ footer {
 
 footer a {
     color: white;
+}
+
+.row {
+    padding: 10px 0;
 }
 
 svg.viz {
