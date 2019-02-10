@@ -26,6 +26,12 @@ function create_visuals(e) {
     });
 
     visuals.push({
+      "dollars-per-user": bigStatistic("Facebook thinks your privacy is worth",
+          "$24.96",
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
       "advertisers-count": bigStatistic("Number of advertisers individually targeting you",
           parsedData["ads"]["targeting_advertisers"].length,
           FAKEBOOKBLUE)
