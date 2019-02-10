@@ -2,19 +2,15 @@
  * Allows the webpage to accept and decompress a zip file of Facebook data, recognize the JSON files and read them using
  * JSON.parse(), and then compile all the resulting JSON objects into a single object for export.
  */
-zip.workerScriptsPath = "../extraction_prototype/lib/";
+zip.workerScriptsPath = "../upload/lib/";
 
 let filePicker = document.getElementById("file-picker");
 
-// the function to call on the data, once it's loaded
-var vizData = null;
+// The function to call on the data, once it's loaded
 let dataCallback = function (d) {
-  vizData = etl(d);
-  renderVisualizations(vizData);
-};
-
-let indexedDBCallback = function (d) {
-    insertIntoIndexedDB(d);
+  var parsedData = etl(d);
+  console.dir(parsedData);
+  //renderVisualizations(vizData);
 };
 
 filePicker.addEventListener('change', function () {
@@ -34,7 +30,6 @@ filePicker.addEventListener('change', function () {
 
                     let JSONEntries = [];  // List to contain only the JSON entries
                     let completedJSON = 0;  // Counter for the number of JSON that we've completed
-                    let numCompletions = 0;  // This lets us check that the all-complete condition is met only once
 
                     // First pull out all the JSON entries in the zip file and store them in a separate list
                     for (let i = 0; i < entries.length; i++) {
@@ -84,11 +79,9 @@ filePicker.addEventListener('change', function () {
 
                                 completedJSON++;
                                 if (completedJSON === JSONEntries.length) {
-                                    numCompletions++;
                                     // console.log("COMPLETE!!!", completedJSON, "out of", JSONEntries.length, "(",
                                     //     numCompletions, ")");
-                                    indexedDBCallback(filenameJsonMap);
-                                    //dataCallback(filenameJsonMap);
+                                    dataCallback(filenameJsonMap);
                                 }
 
                             }, function (current, total) {
