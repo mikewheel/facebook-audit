@@ -1,46 +1,84 @@
-// Mock Data for testing purposes
-const mockData = {
-  "messages_viz": {
-    "Sam": [
-      [new Date('Sun, 08 Apr 2018'), 10],
-      [new Date('Sun, 09 Apr 2018'), 20],
-      [new Date('Sun, 10 Apr 2018'), 5],
-      [new Date('Sun, 11 Apr 2018'), 70],
-      [new Date('Sun, 12 Apr 2018'), 100]
-    ],
-    "Dave": [
-      [new Date('Sun, 09 Apr 2018'), 10],
-      [new Date('Sun, 10 Apr 2018'), 40],
-      [new Date('Sun, 11 Apr 2018'), 2],
-      [new Date('Sun, 12 Apr 2018'), 60],
-      [new Date('Sun, 13 Apr 2018'), 10]
-    ]
-  }
-};
+/**
+ * visualization.js
+ * Author: Sam Xifaras
+ *
+ * This file exposes functions for visualizing statistics derived from Facebook data
+ */
 
 /*
- * Global object with dimension data for rendering
+ * Data format expected by this file:
+ * Array of objects of key value pairs.
+ * For example:
+ * To visualize FB friends each year as a bar chart, the data should look like this:
  */
-const dimensions = {
-  width: 1000,
-  height: 600,
-  marginLeft: 50,
-  marginRight: 20,
-  marginTop: 100,
-  marginBottom: 40
-};
 
-/**
+let exampleData = [
+  {
+    "year" : 2014,
+    "numFriends" : 204
+  },
+  {
+    "year" : 2015,
+    "numFriends" : 214
+  }
+];
+
+
+function visualize(id, data, method) {
+  switch (method) {
+    case "ordinalBarChart":
+      break;
+  }
+}
+
+
+function render() {
+  let margin = {
+    top: 40,
+    left: 40,
+    bottom: 40,
+    right: 40
+  };
+/*
+  // Render
+  ordinalBarChart("viz",
+      exampleData,
+      "year",
+      "numFriends",
+      "",
+      800,
+      600, margin,
+      titleX="",
+      titleY="",
+      legend = true);*/
+
+  bigStatistic("stat-ads", "NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/** FIXME
+ * timeSeriesLineChart
+ *
  * Function that renders a line chart onto the svg with the given id.
  * This function assumes that an svg with the given id exists
  * @param id the id of the svg
  * @param title title of the chart
  * @param dataObject The data object
  */
-function chart(id, title, dataObject) {
-  const messagesData = dataObject["messages_viz"];
+function timeSeriesLineChart(id, data, title) {
 
-  let keys = Object.keys(messagesData);
+  let keys = Object.keys(data);
   let colors = [
     "rgb(255, 0, 0)",
     "rgb(0, 255, 0)",
@@ -52,7 +90,7 @@ function chart(id, title, dataObject) {
   // Sort input data
   keys = keys.sort((k1, k2) => {
     function msgCountTotal(k) {
-      return messagesData[k].map(e => {
+      return data[k].map(e => {
         return e[1]
       }).reduce((c1, c2) => {
         return c1 + c2
@@ -65,7 +103,7 @@ function chart(id, title, dataObject) {
   let allDates = [];
   let allValues = [];
   keys.forEach((key) => {
-    messagesData[key].forEach((entry) => {
+    data[key].forEach((entry) => {
       allDates.push(entry[0]);
       allValues.push(entry[1]);
     });
@@ -110,9 +148,9 @@ function chart(id, title, dataObject) {
   // Create line function that is used to draw the path
   let line = d3.line()
       .defined(d => {
-          console.log(d[1]);
-          console.log(y(d[1] + 1));
-          return true;
+        console.log(d[1]);
+        console.log(y(d[1] + 1));
+        return true;
       })
       .x(d => x(d[0]))
       .y(d => y(d[1]))
@@ -142,7 +180,7 @@ function chart(id, title, dataObject) {
 
     // Bind the data and draw the path
     lineGroup.append("path")
-        .datum(messagesData[key])
+        .datum(data[key])
         .attr("fill", "none")
         .attr("stroke", colors[index])
         .attr("stroke-width", 1.5)
@@ -151,7 +189,7 @@ function chart(id, title, dataObject) {
         .attr("d", line);
 
     lineGroup.selectAll("circle")
-        .data(messagesData[key])
+        .data(data[key])
         .enter()
         .append("circle")
         .attr("r", radius)
@@ -159,22 +197,4 @@ function chart(id, title, dataObject) {
         .attr("cx", d => x(d[0]))
         .attr("cy", d => y(d[1]))
   });
-}
-
-/**
- * Adds handlers for mouseover and mouseout events and a popup that describes each point
- */
-function configurePointInteractions(pointSelection, initialRadius, textFunc) {
-    pointSelection.on("mouseover")
-        .transition()
-        .attr("r", initialRadius + 10)
-        .duration(200);
-}
-
-/*
- * Renders all visualizations
- */
-function renderVisualizations(data) {
-  // TODO: Import data from ETL stage
-  chart("messages_viz", "Messages", data);
 }

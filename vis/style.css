@@ -1,5 +1,57 @@
-svg.viz {
+html {
+    margin: 0px;
+    padding: 0px;
+    height:100%;
+}
+
+body {
+    font-family: Helvetica;
+    margin: 0px;
+    padding: 0px;
+    background-color: #f0f0f0;
+    height:100%;
+}
+
+#content-wrapper {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    height: 100%;
+    background-color: white;
+}
+
+#content {
+    padding-top: 50px;
+}
+
+.centered {
     margin-left: auto;
     margin-right: auto;
     display: block;
 }
+
+.centered-inline-block {
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+}
+
+.section {
+    width: 100%;
+    display: block;
+    text-align: center;
+
+}
+
+h1 {
+    display:inline;
+}
+
+/*
+svg {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+*/
