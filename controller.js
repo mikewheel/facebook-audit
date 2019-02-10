@@ -4,7 +4,9 @@
  */
 function handle_error(e) {
     let errorText = e.detail;
-    console.log(errorText)
+    console.log(errorText);
+    // TODO -- redisplay the original window
+    // TODO -- display a modal describing the nature of the error
 }
 
 /**
@@ -21,11 +23,10 @@ function main() {
 
     document.addEventListener('error-triggered', handle_error); // Any error occurs -> Go back to main page
     filePicker.addEventListener('change', unzipFBData); // File uploaded -> unzip the file
-    // filePicker.addEventListener('change', switchToLoadingScreen); // File uploaded -> display loading screen
+    filePicker.addEventListener('change', displayLoadingPage); // File uploaded -> display loading screen
     document.addEventListener('unzip-complete', etl); // Unzip complete -> prune and extract
     document.addEventListener('etl-complete', match_signatures); // Extraction complete -> meet viz signatures
-    // document.addEventListener('viz-data-ready', switchToVizScreen); // Signatures met -> display empty viz screen
-    // document.addEventListener('viz-screen-ready', callAllD3) // Empty Visualization screen ready -> call D3 on DOM
+    // document.addEventListener('viz-data-ready', switchToVizScreen); // Signatures met -> display the viz screen
 
 }
 
