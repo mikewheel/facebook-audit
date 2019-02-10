@@ -81,7 +81,7 @@ function unzipFBData(e) {
 
                                 if (completedJSON === JSONEntries.length) {
                                     //var rawData = dirPart;
-                                    let event = new CustomEvent("unzip-complete", { detail: dirPart });
+                                    let event = new CustomEvent("unzip-complete", { detail: filenameJsonMap });
                                     document.dispatchEvent(event);
                                 }
 
