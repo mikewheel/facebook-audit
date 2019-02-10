@@ -11,7 +11,9 @@ function etl(data) {
   try {
     return {
       "ads": parse_ads(data["ads"]),
-      "apps": parse_apps(data["apps_and_websites"])
+      "apps": parse_apps(data["apps_and_websites"]),
+      "comments": parse_comments(data["comments"]),
+      "events": parse_events(data["events"])
     }
   }
   catch (error) {
@@ -36,6 +38,20 @@ function parse_apps(data) {
   return installedAppsList;
 }
 
+function parse_comments(data) {
+  let commentsList = [];
+  data["comments.json"]["comments"].forEach(function(comment) {
+    commentsList.push({
+      "timestamp": comment["timestamp"],
+      "comment": comment["data"][0]["comment"]["comment"]
+    })
+  });
+  return commentsList;
+}
+
+function parse_events(data){
+  return false;
+}
 
 
 // function parse_reactions(data) {
