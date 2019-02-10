@@ -102,7 +102,7 @@ function ordinalBarChart(data, colX, colY, color, header, titleX = "", titleY = 
         .attr("y", 0)
         .attr("x", 9)
         .attr("dy", ".35em")
-        .attr("transform", "rotate(90)")
+        .attr("transform", "rotate(45)")
         .style("text-anchor", "start");
 
     svg.append("path")
@@ -113,6 +113,14 @@ function ordinalBarChart(data, colX, colY, color, header, titleX = "", titleY = 
     // Add y axis
     graphGroup.append("g")
         .call(yAxis);
+
+    // Add title text
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "20px")
+        .text(header);
 
     graphGroup.selectAll("rect")
         .data(data)
