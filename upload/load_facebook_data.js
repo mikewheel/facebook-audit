@@ -2,21 +2,20 @@
  * Allows the webpage to accept and decompress a zip file of Facebook data, recognize the JSON files and read them using
  * JSON.parse(), and then compile all the resulting JSON objects into a single object for export.
  */
-zip.workerScriptsPath = "../upload/lib/";
 
-let filePicker = document.getElementById("file-picker");
+zip.workerScriptsPath = "./lib/";
 
-// The function to call on the data, once it's loaded
-let dataCallback = function (d) {
-  var parsedData = etl(d);
-  console.dir(parsedData);
-  //renderVisualizations(vizData);
-};
+/**
+ * Unzips the data from the uploaded zip file.
+ * @param e - the change event on the file input.
+ */
+function unzipFBData(e) {
 
-filePicker.addEventListener('change', function () {
-  // First extract the File object from the input form field
-  let zipFileBlob = filePicker.files[0];
-  console.log("Received the file: ", zipFileBlob.name);
+    let filePicker = e.target;
+
+    // First extract the File object from the input form field
+    let zipFileBlob = filePicker.files[0];
+    console.log("Received the file: ", zipFileBlob.name);
 
     // Then create the Reader that will handle extracting the data from that file
     zip.createReader(new zip.BlobReader(zipFileBlob),
@@ -78,10 +77,11 @@ filePicker.addEventListener('change', function () {
                                 dirPart[filename] = JSON.parse(text);
 
                                 completedJSON++;
+
                                 if (completedJSON === JSONEntries.length) {
-                                    // console.log("COMPLETE!!!", completedJSON, "out of", JSONEntries.length, "(",
-                                    //     numCompletions, ")");
-                                    dataCallback(filenameJsonMap);
+                                    //var rawData = dirPart;
+                                    let event = new CustomEvent("unzip-complete", { detail: filenameJsonMap });
+                                    document.dispatchEvent(event);
                                 }
 
                             }, function (current, total) {
@@ -92,18 +92,21 @@ filePicker.addEventListener('change', function () {
                                 //     console.log(entry.filename, ": Progress is ", percent_progress, "% (",
                                 //         current, " out of ", total, ")");
                                 // }
-                                return;
+                                //return;
                             }
                         );
                     }
                 } else {
                     console.log("No entries in the zip file!");
-                    throw new Error("No entries in zip file!")
+                    let errorEvent = new CustomEvent("error-triggered",
+                        { detail: "No entries were contained in the zip file!" });
+                    document.dispatchEvent(errorEvent);
                 }
             });
         },
         function (error) {
-            console.log("Could not read in ZIP file!");
+            let errorEvent = new CustomEvent("error-triggered", { detail: "Could not read in ZIP file!" });
+            document.dispatchEvent(errorEvent);
             console.log(JSON.stringify(error));
-    });
-});
+        });
+};

@@ -3,28 +3,34 @@
 
 /**
  * Converts the given files into usable json. The output format is a mapping from visualization names
- * to the data that the visualization needs, in the format that the visualization needs.
- * @param data a dictionary, mapping filenames to file contents (the files from the JSON dump)
- * @return a mapping from data viz name to data, or false if an error occurred
+ * to the rawData that the visualization needs, in the format that the visualization needs.
+ * @param e the CustomEvent that is emitted by the unzip function.
+ * @return a mapping from rawData viz name to rawData, or false if an error occurred
  */
-function etl(data) {
+function etl(e) {
     try {
-        return {
-            "ads": parse_ads(data["ads"]),
-            "apps": parse_apps(data["apps_and_websites"]),
-            "comments": parse_comments(data["comments"]),
-            "events": parse_events(data["events"]),
-            "friends": parse_friends(data["friends"]),
-            "groups": parse_groups(data["groups"]),
-            "reactions": parse_reactions(data["likes_and_reactions"]),
-            "messages": parse_messages(data["messages"]),
-            "posts": parse_posts(data["posts"]),
-            "profile_information": parse_profile_info(data["profile_information"]),
-            "search_history": parse_search_history(data["search_history"])
-        }
+        let rawData = e.detail;
+        console.log(e);
+        //console.log(rawData);
+        var detail = {
+            "ads": parse_ads(rawData["ads"]),
+            "apps": parse_apps(rawData["apps_and_websites"]),
+            "comments": parse_comments(rawData["comments"]),
+            "events": parse_events(rawData["events"]),
+            "friends": parse_friends(rawData["friends"]),
+            "groups": parse_groups(rawData["groups"]),
+            "reactions": parse_reactions(rawData["likes_and_reactions"]),
+            "messages": parse_messages(rawData["messages"]),
+            "posts": parse_posts(rawData["posts"]),
+            "profile_information": parse_profile_info(rawData["profile_information"]),
+            "search_history": parse_search_history(rawData["search_history"])
+        };
+        let event = new CustomEvent("etl-complete", { detail: detail });
+        document.dispatchEvent(event);
     } catch (error) {
-        console.log(error);
-        return false;
+        let errorEvent = new CustomEvent("error-triggered", { detail: "Error parsing data!" });
+        document.dispatchEvent(errorEvent);
+        console.log(JSON.stringify(error));
     }
 }
 

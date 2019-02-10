@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Load Your Facebook Data Here</title>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="static/style.css" type="text/css"/>
+
+</head>
+<body>
+
+<header>
+  <h3>Facebook Audit</h3>
+</header>
+
+<main>
+  <h1>Upload your zip file here:</h1>
+  <form>
+    <input type="file" id="file-picker" accept=".zip, application/zip"/>
+  </form>
+</main>
+
+<!-- TODO -- Add link to the Facebook download page -->
+<footer>
+  <a href="https://github.com/mikewheel/facebook-audit">Github</a>
+</footer>
+
+<!-- Library imports -->
+<script src="lib/d3.v5.min.js"></script>
+<script src="lib/zip.js"></script>
+<script src="lib/z-worker.js"></script>
+
+<!-- App-specific imports -->
+<script src="upload/load_facebook_data.js" type="text/javascript"></script>
+<script src="etl/etl_from_fb_json.js" type="text/javascript"></script>
+<script src="controller.js"></script>
+</body>
+</html>
