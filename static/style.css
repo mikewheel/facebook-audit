@@ -1,5 +1,6 @@
-html, body {
+html, body, .container-fluid {
     min-height: 100vh;
+    font-family: Lato, sans-serif;
 }
 
 header, footer {
@@ -9,14 +10,16 @@ header, footer {
 }
 
 footer {
-    position: absolute;
-    bottom: 0;
     text-align: center;
     font-size: 1.2em;
 }
 
 footer a {
     color: white;
+}
+
+.app-title {
+    padding-top: 0.5em;
 }
 
 svg.viz {

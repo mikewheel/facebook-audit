@@ -5,8 +5,8 @@
 function handle_error(e) {
     let errorText = e.detail;
     console.log(errorText);
-    // TODO -- redisplay the original window
-    // TODO -- display a modal describing the nature of the error
+    // TODO -- display an alert describing the nature of the error
+    // TODO -- trigger reload of page
 }
 
 /**
@@ -22,6 +22,7 @@ function main() {
     document.addEventListener('unzip-complete', etl); // Unzip complete -> prune and extract
     document.addEventListener('etl-complete', create_visuals); // Extraction complete -> create visualizations
     // document.addEventListener('viz-data-ready', switchToVizScreen); // Signatures met -> display empty viz screen
+    document.addEventListener('viz-data-ready', displayVizPage); // Signatures met -> display the viz screen
 
 }
 

@@ -12,21 +12,66 @@
 </head>
 <body>
 
-<header>
-  <h3>Facebook Audit</h3>
-</header>
+<div class="container-fluid d-flex flex-column justify-content-between">
 
-<main id="main">
-  <h1>Upload your zip file here:</h1>
-  <form>
-    <input type="file" id="file-picker" accept=".zip, application/zip"/>
-  </form>
-</main>
+  <div class="row d-flex justify-content-start">
+    <header class="col-12 d-flex justify-content-start">
+      <h2 class="app-title">Facebook Audit</h2>
+    </header>
+  </div>
 
-<!-- TODO -- Add link to the Facebook download page -->
-<footer>
-  <a href="https://github.com/mikewheel/facebook-audit">Github</a>
-</footer>
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-6">
+      <main id="main">
+
+        <div class="row">
+          <div class="col-12">
+            <h1>Inspect your Facebook Data</h1>
+            <ol>
+              <li><a href="https://www.facebook.com/dyi/">Start here</a>, then click
+                <b>Download Your Information.</b></li>
+              <li>Under <i>New File</i>, set Format to JSON and Media Quality to Low.</li>
+              <li>Once Facebook generates the zip file, download it and then open it below.</li>
+            </ol>
+            <form>
+              <div class="custom-file">
+                <input type="file" id="file-picker" class="custom-file-input" accept=".zip, application/zip"/>
+                <label class="custom-file-label" for="file-picker">Open your file here: </label>
+              </div>
+            </form>
+            <p>We respect your privacy with 100% client-side service.
+              <strong>Your file never leaves the browser, so we never see your data.</strong></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <h1>Why?</h1>
+            <p>
+              It's no secret that Facebook has massive amounts of data on nearly everyone in the world. It's also not a
+              surprise to hear that recently Facebook hasn't
+              <a href="ttps://www.nytimes.com/2018/09/28/technology/facebook-hack-data-breach.html">exactly
+              done</a>
+              <a href="https://www.nytimes.com/interactive/2018/05/14/technology/facebook-ads-congress.html">a good
+              job</a>
+              <a href="https://www.nytimes.com/2018/03/17/us/politics/cambridge-analytica-trump-campaign.html">managing
+              that data.</a> Yet most users have never actually seen <em>their</em> account's data. This tool aims to
+              inform social media users of the data exposure they've incurred over their lifetime on the platform, and
+              to start a conversation about the downsides of a strong online presence.
+            </p>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="row">
+    <footer class="col-12">
+      <a href="https://github.com/mikewheel/facebook-audit">Github</a>
+    </footer>
+  </div>
+</div>
 
 <!-- Library imports -->
 <script src="lib/d3.v5.min.js"></script>
