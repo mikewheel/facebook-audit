@@ -5,8 +5,8 @@
 function handle_error(e) {
     let errorText = e.detail;
     console.log(errorText);
-    // TODO -- redisplay the original window
-    // TODO -- display a modal describing the nature of the error
+    // TODO -- display an alert describing the nature of the error
+    // TODO -- trigger reload of page
 }
 
 /**
