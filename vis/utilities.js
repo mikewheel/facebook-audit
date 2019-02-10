@@ -118,3 +118,48 @@ function addBorder(svg) {
 
     return borderedSvg.node();
 }
+
+
+/**
+ * Gets a random subarray of the given array of the given size
+ * @param arr The array to sample
+ * @param size The size of the sample
+ * @returns {Array} The random sample
+ *
+ * Copied from https://stackoverflow.com/questions/11935175/sampling-a-random-subset-from-an-array
+ */
+function getRandomSubarray(arr, size) {
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
+}
+
+/**
+ * Creates an object
+ * @param friends
+ */
+function friendsSplitByYear(friends) {
+    let intermed = {};
+    let out = [];
+    friends.forEach((item) => {
+       let date = new Date(item[timestamp] * 1000);
+       if (intermed.hasOwnProperty(date.getFullYear().toString())) {
+           intermed[date.getFullYear().toString()].push(item[name]);
+       } else {
+           intermed[date.getFullYear().toString()] = [item[name]];
+       }
+    });
+
+    Object.keys(intermed).forEach((year) => {
+        out.push({"year": +year, "count": intermed[year].length});
+    });
+
+    return out.sort((a, b) => {
+        return b.year - a.year;
+    });
+}

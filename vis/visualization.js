@@ -39,6 +39,16 @@ function create_visuals(e) {
 
     // TODO: ACTUALLY CREATE VISUALS
 
+    // SRS of advertisers
+    visuals.push({
+      "advertisers-srs": SRSVisual(getRandomSubarray(parsedData["targeting_advertisers"], 12), 4)
+    });
+
+    visuals.push({
+      "friends-made-each-year": ordinalBarChart(friendsSplitByYear(parsedData["friends"]), "year", "count",
+          FAKEBOOKBLUE, "", "","", false)
+    });
+
     visuals.push({
       "apps": bigStatistic("NUMBER OF APPS YOU HAVE LINKED TO FACEBOOK",
           parsedData["apps"].length)
@@ -46,8 +56,29 @@ function create_visuals(e) {
 
     visuals.push({
       "friends": bigStatistic("friends",
-          parsedData["friends"],
+          parsedData["friends"].length,
           FAKEBOOKBLUE,
+          false)
+    });
+
+    visuals.push({
+      "reactions": bigStatistic("reactions to posts",
+          parsedData["reactions"].length,
+          FACEBOOKBLUE,
+          false)
+    });
+
+
+    visuals.push([
+      "posts": bigStatistic("posts",
+          parsedData["posts"].length,
+          FACEBOOKBLUE,
+          false)
+    ]);
+
+    visuals.push({
+      "comments": bigStatistic("comments on posts",
+          parsedData["comments"].length,
           false)
     });
 

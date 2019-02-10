@@ -40,7 +40,7 @@ function get(data, args) {
         if (intermed.hasOwnProperty(arg)) {
             intermed = intermed[arg];
         } else {
-            return {}
+            return []
         }
     });
     console.log(intermed)
