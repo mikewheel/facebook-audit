@@ -4,16 +4,15 @@
  *
  */
 
-
 /**
  * Preset margins for all of the visualizations
  * @type {{top: number, left: number, bottom: number, right: number}}
  */
 let margin = {
-    top: 40,
-    left: 40,
-    bottom: 40,
-    right: 40
+    top: 20,
+    left: 20,
+    bottom: 20,
+    right: 20
 };
 
 /**
@@ -105,8 +104,8 @@ function natRange(n) {
 function addBorder(svg) {
     let borderedSvg = d3.select(svg);
 
-    let width = borderedSvg.attr("width");
-    let height = borderedSvg.attr("height");
+    let width = borderedSvg.attr("_initwidth");
+    let height = borderedSvg.attr("_initheight");
 
     borderedSvg.append("rect")
         .attr("x", 0)

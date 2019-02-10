@@ -10,15 +10,16 @@
  * @param numColor Color of the number to render
  */
 function bigStatistic(text, number, numColor) {
-    let svg = d3.select(document.createElementNS('http://www.w3.org/2000/svg', "svg"));
+    let svg = d3.select(document.createElementNS(svgNS, "svg"));
 
-    let width = 600;
-    let height = 400;
+    let width = 500;
+    let height = 150;
 
-    //responsive SVG needs these 2 attributes and no width and height attr
     svg.attr("preserveAspectRatio", "xMinYMin meet")
         .attr("viewBox", `0 0 ${width} ${height}`)
-        .classed("svg-content-responsive", true);
+        .classed("svg-content-responsive", true)
+        .attr("_initwidth", width)
+        .attr("_initheight", height);;
 
 
     svg.append("text")
@@ -46,27 +47,34 @@ function bigStatistic(text, number, numColor) {
 
 /**
  * Generates a visual of a simple random sample of items from some dataset
- * @param id The id of the svg tag into which to render the visual
  * @param data An array of strings to render
  * @param margin A margin object
  * @param numColumns Number of columns to organize the entries into
  *
  * Test: passing
  */
-function SRSVisual(id, data, margin, numColumns) {
-    let padding = 10;
-    let svg = d3.select("#" + id);
+function SRSVisual(data, numColumns) {
+    let svg = d3.select(document.createElementNS(svgNS, "svg"));
 
+    let width = 600;
+    let height = 400;
+
+    svg.attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .classed("svg-content-responsive", true)
+        .attr("_initwidth", width)
+        .attr("_initheight", height);
+
+    let padding = 10;
     let fontSize = 20;
 
-    let width = svg.attr("width");
-    let height = svg.attr("height");
-
-    let numRows = Math.ceil(data.length / numColumns)
+    let numRows = Math.ceil(data.length / numColumns);
     let rowHeight = height / numRows;
 
     let columnWidth = width / numColumns;
     let textWidthConstraint = columnWidth - (2 * padding);
+
+    console.log(numColumns, numRows);
 
     let x = d3.scaleOrdinal()
         .domain(natRange(numColumns))
@@ -98,5 +106,5 @@ function SRSVisual(id, data, margin, numColumns) {
         .delay((d, i) => i * 100)
         .attr("font-size", fontSize);
 
-    return svg;
+    return svg.node();
 }

@@ -12,8 +12,9 @@
  * To visualize FB friends each year as a bar chart, the data should look like this:
  */
 
-
+// Constants
 const FAKEBOOKBLUE = "#4267b2";
+const svgNS = "http://www.w3.org/2000/svg";
 
 let exampleData = [
   {
@@ -40,8 +41,11 @@ function render() {
       titleY="",
       legend = true);*/
 
-  let svg = bigStatistic("NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin, 600, 100);
-  document.getElementById("insert").appendChild(svg);
+/*
+  let svg = addBorder(bigStatistic("NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin, 600, 100));
+  document.getElementById("insert").appendChild(svg); // This div must also be classed with svg-container
+*/
 
-  //addBorder(SRSVisual("stat-ads", ["hello", "world", "this", "is", "a", "test"], margin, 4));
+  let svg = addBorder(SRSVisual(["hello", "world", "this", "is", "a", "test"], 1));
+  document.getElementById("insert").appendChild(svg); // This div must also be classed with svg-container
 }
