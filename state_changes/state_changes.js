@@ -38,6 +38,12 @@ function displayVizPage(e) {
             <div id="time-on-platform"></div>
           </div>
         </div>
+        
+        <div class="row viz-row">
+            <div class="col-12">
+                <div id="dollars-per-user" style="font-size: 60px"></div>
+            </div>
+        </div>
 
         <div class="row viz-row">
           <div class="col-12">
