@@ -5,6 +5,16 @@
  */
 
 
+/**
+ * Preset margins for all of the visualizations
+ * @type {{top: number, left: number, bottom: number, right: number}}
+ */
+let margin = {
+    top: 40,
+    left: 40,
+    bottom: 40,
+    right: 40
+};
 
 /**
  * Constructs a legend on a graph
@@ -88,11 +98,17 @@ function natRange(n) {
     else return natRange(n - 1).concat([n - 1]);
 }
 
+/**
+ * Creates a border around the graphic
+ * @param svg A DOM svg element
+ */
 function addBorder(svg) {
-    let width = svg.attr("width");
-    let height = svg.attr("height");
+    let borderedSvg = d3.select(svg);
 
-    svg.append("rect")
+    let width = borderedSvg.attr("width");
+    let height = borderedSvg.attr("height");
+
+    borderedSvg.append("rect")
         .attr("x", 0)
         .attr("y", 0)
         .attr("width", width)
@@ -100,4 +116,6 @@ function addBorder(svg) {
         .attr("fill-opacity", 0.0)
         //.attr("fill", FAKEBOOKBLUE)
         .attr("stroke", "black");
+
+    return borderedSvg.node();
 }

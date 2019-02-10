@@ -26,22 +26,7 @@ let exampleData = [
   }
 ];
 
-
-function visualize(id, data, method) {
-  switch (method) {
-    case "ordinalBarChart":
-      break;
-  }
-}
-
-
 function render() {
-  let margin = {
-    top: 40,
-    left: 40,
-    bottom: 40,
-    right: 40
-  };
 /*
   // Render
   ordinalBarChart("viz",
@@ -55,7 +40,8 @@ function render() {
       titleY="",
       legend = true);*/
 
-  //bigStatistic("stat-ads", "NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin);
+  let svg = bigStatistic("NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin, 600, 100);
+  document.getElementById("insert").appendChild(svg);
 
-  addBorder(SRSVisual("stat-ads", ["hello", "world", "this", "is", "a", "test"], margin, 4));
+  //addBorder(SRSVisual("stat-ads", ["hello", "world", "this", "is", "a", "test"], margin, 4));
 }

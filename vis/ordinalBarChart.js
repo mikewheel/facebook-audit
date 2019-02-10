@@ -1,5 +1,6 @@
 /**
  * ordinalBarChart.js
+ * Author: Sam Xifaras
  *
  * Exposes an interface to draw an Ordinal Bar Chart
  */
@@ -31,6 +32,8 @@ function calculateBarChartXs(n, total, rectWidth, graphWidth, margin) {
  * @param titleX Title of the x axis
  * @param titleY Title of the y axis
  * @param legend Whether or not to include a legend
+ *
+ * Test: indeterminate
  */
 function ordinalBarChart(id, data, colX, colY, header, width, height, margin, titleX = "", titleY = "", legend = true) {
     // ratio between width of graph and width of the whole visualization

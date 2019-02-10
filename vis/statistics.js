@@ -1,29 +1,25 @@
 /**
  * statistics.js
+ * Author: Sam Xifaras
  */
 
 /**
  * Renders a big statistic
- * @param id Id of the svg tag to render it in
  * @param text Description text
  * @param number The number to render
  * @param numColor Color of the number to render
- * @param width Width of the svg
  */
-function bigStatistic(id, text, number, numColor, margin) {
-    let svg = d3.select("#" + id);
+function bigStatistic(text, number, numColor) {
+    let svg = d3.select(document.createElementNS('http://www.w3.org/2000/svg', "svg"));
 
-    let width = svg.attr("width");
-    let height = svg.attr("height");
+    let width = 600;
+    let height = 400;
 
-    // border
-    svg.append("rect")
-        .attr("stroke", "black")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("fill", "white");
+    //responsive SVG needs these 2 attributes and no width and height attr
+    svg.attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .classed("svg-content-responsive", true);
+
 
     svg.append("text")
         .text(text)
@@ -44,7 +40,7 @@ function bigStatistic(id, text, number, numColor, margin) {
         .attr("font-weight", "bold")
         .attr("fill", numColor);
 
-    return svg;
+    return svg.node();
 }
 
 
@@ -54,6 +50,8 @@ function bigStatistic(id, text, number, numColor, margin) {
  * @param data An array of strings to render
  * @param margin A margin object
  * @param numColumns Number of columns to organize the entries into
+ *
+ * Test: passing
  */
 function SRSVisual(id, data, margin, numColumns) {
     let padding = 10;
