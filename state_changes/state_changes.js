@@ -35,6 +35,12 @@ function displayVizPage(e) {
     let vizTemplateHTML = `
         <div class="row viz-row">
           <div class="col-12">
+            <div id="time-on-platform"></div>
+          </div>
+        </div>
+
+        <div class="row viz-row">
+          <div class="col-12">
             <div id="advertisers-count"></div>
           </div>
         </div>
@@ -49,12 +55,6 @@ function displayVizPage(e) {
         <div class="row viz-row">
           <div class="col-12">
             <div id="ad-category-srs"></div>
-          </div>
-        </div>
-        
-        <div class="row viz-row">
-          <div class="col-12">
-            <div id="time-on-platform"></div>
           </div>
         </div>
 
