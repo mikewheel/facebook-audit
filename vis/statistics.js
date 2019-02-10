@@ -40,7 +40,7 @@ function blankSVG() {
 function bigStatistic(text, number, numColor, numberOnRight=true) {
     let svg = d3.select(document.createElementNS(svgNS, "svg"));
 
-    let width = 500;
+    let width = 800;
     let height = 150;
 
     svg.attr("preserveAspectRatio", "xMinYMin meet")
@@ -55,8 +55,8 @@ function bigStatistic(text, number, numColor, numberOnRight=true) {
         .attr("y", height / 2)
         .attr("text-anchor", numberOnRight ? "start" : "end")
         .attr("dominant-baseline", "central")
-        .attr("font-size", 16)
-        .attr("textLength", (2 * width) / 3);
+        .attr("font-size", 16);
+        //.attr("textLength", (2 * width) / 3);
 
     svg.append("text")
         .text(number.toString())
@@ -83,8 +83,8 @@ function bigStatistic(text, number, numColor, numberOnRight=true) {
 function SRSVisual(data, numColumns) {
     let svg = d3.select(document.createElementNS(svgNS, "svg"));
 
-    let width = 600;
-    let height = 400;
+    let width = 500;
+    let height = 500;
 
     svg.attr("preserveAspectRatio", "xMinYMin meet")
         .attr("viewBox", `0 0 ${width} ${height}`)
@@ -93,7 +93,7 @@ function SRSVisual(data, numColumns) {
         .attr("_initHeight", height);
 
     let padding = 10;
-    let fontSize = 20;
+    let fontSize = 16;
 
     let numRows = Math.ceil(data.length / numColumns);
     let rowHeight = height / numRows;
@@ -122,7 +122,7 @@ function SRSVisual(data, numColumns) {
         .attr("fill", "black")
         .attr("text-anchor", "middle")
         .text(d => d)
-        //.call(wrap, columnWidth) TODO: Find out how to do text wrapping
+        //.call(wrap, columnWidth) //TODO: Find out how to do text wrapping
         .transition("opacity")
         .duration(500)
         .delay((d, i) => i * 100)

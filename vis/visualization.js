@@ -67,11 +67,11 @@ function create_visuals(e) {
 
     // SRS of advertisers
     visuals.push({
-      "ad-category-srs": SRSVisual(getRandomSubarray(parsedData["ads"]["targeting_advertisers"], 12), 4)
+      "ad-category-srs": SRSVisual(getRandomSubarray(parsedData["ads"]["targeting_advertisers"], 12), 1)
     });
 
     visuals.push({
-      "apps-srs": SRSVisual(getRandomSubarray(parsedData["apps"], 9), 3)
+      "apps-srs": SRSVisual(getRandomSubarray(parsedData["apps"], 9), 1)
     });
 
     visuals.push({
