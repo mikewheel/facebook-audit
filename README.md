@@ -1,2 +1,3 @@
-# social-media-privacy-audit
-Project for HackBeanpot 2019.
+# Facebook Audit
+
+Made by Daniel Rassaby, Sam Xifaras, Michael Wheeler, and Julian Zucker.
