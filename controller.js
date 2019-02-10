@@ -26,7 +26,7 @@ function main() {
     filePicker.addEventListener('change', displayLoadingPage); // File uploaded -> display loading screen
     document.addEventListener('unzip-complete', etl); // Unzip complete -> prune and extract
     document.addEventListener('etl-complete', match_signatures); // Extraction complete -> meet viz signatures
-    // document.addEventListener('viz-data-ready', switchToVizScreen); // Signatures met -> display the viz screen
+    document.addEventListener('viz-data-ready', displayVizPage); // Signatures met -> display the viz screen
 
 }
 
