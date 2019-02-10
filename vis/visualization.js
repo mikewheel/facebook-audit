@@ -1,30 +1,165 @@
 /**
  * visualization.js
- * Author: Sam Xifaras
- *
  * This file exposes functions for visualizing statistics derived from Facebook data
  */
 
-/*
- * Data format expected by this file:
- * Array of objects of key value pairs.
- * For example:
- * To visualize FB friends each year as a bar chart, the data should look like this:
- */
 
-// Constants
 const FAKEBOOKBLUE = "#4267b2";
 const svgNS = "http://www.w3.org/2000/svg";
 
-let exampleData = [
-  {
-    "year" : 2014,
-    "numFriends" : 204
-  },
-  {
-    "year" : 2015,
-    "numFriends" : 214
+/**
+ * Converts the parsed data from etl function to several visualization-specific JavaScript objects.
+ * @param e The event from the completion of parsing the data (etl-complete).
+ */
+function create_visuals(e) {
+  try {
+    let parsedData = e.detail;
+    console.dir(parsedData);
+    var visuals = []; // to be inserted directly in the page, format: [{id: dom}, ...]
+
+
+    // CREATING THE VISUALIZATIONS
+
+    visuals.push({
+      "time-on-platform": bigStatistic("You have been giving Facebook data since",
+          new Date(parsedData["profile_information"]["registration_timestamp"] * 1000).toString(),
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "advertisers-count": bigStatistic("Number of advertisers individually targeting you",
+          parsedData["targeting_advertisers"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "ad-category-count": bigStatistic("Facebook thinks you are likely to click ads in this many areas",
+          parsedData["ad_interests"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "messages-count": bigStatistic("You have sent this many messages, Facebook saves the content of each",
+          parsedData["messages"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "group-membership-count": bigStatistic("You are a member of this many groups, each of them has associated stored info",
+          parsedData["groups"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "former-friends": bigStatistic("I don't know what they did to piss you off, but you unfriended this many people",
+          parsedData["friends"]["former_friends"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "rejected-friend-requests": bigStatistic("Too good to add these people? Number of rejected friend requests",
+          parsedData["friends"]["requests-you-rejected"].length,
+          FAKEBOOKBLUE)
+    });
+
+
+    // TODO: ACTUALLY CREATE VISUALS
+
+    // SRS of advertisers
+    visuals.push({
+      "ad-category-srs": SRSVisual(getRandomSubarray(parsedData["targeting_advertisers"], 12), 4)
+    });
+
+    visuals.push({
+      "apps-srs": SRSVisual(getRandomSubarray(parsedData["apps"], 9), 3)
+    });
+
+    visuals.push({
+      "event-attendance": ordinalBarChart([{
+        "status": "Accepted",
+        "count": parsedData["events"]["accepted"].length
+      },
+        {
+          "status": "Declined",
+          "count": parsedData["events"]["declined"].length
+        },
+        {
+          "status": "Hosted",
+          "count": parsedData["events"]["hosted"].length
+        },
+        {
+          "status": "Interested",
+          "count": parsedData["events"]["interested"].length
+        }],
+          "status",
+          "count",
+          FAKEBOOKBLUE,
+          "",
+          "",
+          "",
+          false)
+    });
+
+    visuals.push({
+      "messages-srs": SRSVisual(getRandomSubarray(parsedData["messages"], 12).map(d => d.content),
+          4)
+    });
+
+    visuals.push({
+      "friends-over-time": ordinalBarChart(friendsSplitByYear(parsedData["friends"]), "year", "count",
+          FAKEBOOKBLUE, "", "","", false)
+    });
+
+    visuals.push({
+      "apps-count": bigStatistic("NUMBER OF APPS YOU HAVE LINKED TO FACEBOOK",
+          parsedData["apps"].length)
+    });
+
+    visuals.push({
+      "friends-counts": bigStatistic("friends",
+          parsedData["friends"].length,
+          FAKEBOOKBLUE,
+          false)
+    });
+
+    visuals.push({
+      "reactions-count": bigStatistic("reactions to posts",
+          parsedData["reactions"].length,
+          FACEBOOKBLUE,
+          false)
+    });
+
+    visuals.push({
+      "posts-count": bigStatistic("posts",
+          parsedData["posts"].length,
+          FACEBOOKBLUE,
+          false)
+    });
+
+    visuals.push({
+      "comments-count": bigStatistic("comments on posts",
+          parsedData["comments"].length,
+          false)
+    });
+
+    let event = new CustomEvent("visuals-created", { detail: visuals });
+    document.dispatchEvent(event);
+  } catch (error) {
+    let errorEvent = new CustomEvent("error-triggered", { detail: "Error creating graphics!" });
+    document.dispatchEvent(errorEvent);
+    console.log(JSON.stringify(error));
   }
+}
+
+let exampleData = [
+    {
+      "year" : 2014,
+      "numFriends" : 204
+    },
+    {
+      "year" : 2015,
+      "numFriends" : 214
+    }
 ];
 
 function render() {

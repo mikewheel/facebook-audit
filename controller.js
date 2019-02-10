@@ -13,11 +13,6 @@ function handle_error(e) {
  * Converts the parsed data from etl function to several visualization-specific JavaScript objects.
  * @param e The event from the completion of parsing the data (etl-complete).
  */
-function match_signatures(e) {
-    let parsedData = e.detail;
-    console.dir(parsedData)
-}
-
 function main() {
     let filePicker = document.getElementById("file-picker");
 
@@ -25,7 +20,8 @@ function main() {
     filePicker.addEventListener('change', unzipFBData); // File uploaded -> unzip the file
     filePicker.addEventListener('change', displayLoadingPage); // File uploaded -> display loading screen
     document.addEventListener('unzip-complete', etl); // Unzip complete -> prune and extract
-    document.addEventListener('etl-complete', match_signatures); // Extraction complete -> meet viz signatures
+    document.addEventListener('etl-complete', create_visuals); // Extraction complete -> create visualizations
+    // document.addEventListener('viz-data-ready', switchToVizScreen); // Signatures met -> display empty viz screen
     document.addEventListener('viz-data-ready', displayVizPage); // Signatures met -> display the viz screen
 
 }

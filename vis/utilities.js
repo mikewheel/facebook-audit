@@ -1,6 +1,6 @@
 /**
  * utilities.js
- *
+ * Author: Sam Xifaras
  *
  */
 
@@ -90,7 +90,7 @@ function wrap(text, width) {
 /**
  * Creates a range of natural numbers from 0 to n - 1
  * @param n The number of natural numbers in the range
- * @returns An array of natural numbers in ascending order from 0 to n - 1
+ * @returns Array An array of natural numbers in ascending order from 0 to n - 1
  */
 function natRange(n) {
     if (n == 0) return [];
@@ -104,8 +104,8 @@ function natRange(n) {
 function addBorder(svg) {
     let borderedSvg = d3.select(svg);
 
-    let width = borderedSvg.attr("_initwidth");
-    let height = borderedSvg.attr("_initheight");
+    let width = borderedSvg.attr("_initWidth");
+    let height = borderedSvg.attr("_initHeight");
 
     borderedSvg.append("rect")
         .attr("x", 0)
@@ -117,4 +117,52 @@ function addBorder(svg) {
         .attr("stroke", "black");
 
     return borderedSvg.node();
+}
+
+
+/**
+ * Gets a random subarray of the given array of the given size.
+ * If size is greater than length then it returns a shuffled copy of the array
+ * @param arr The array to sample
+ * @param size The size of the sample
+ * @returns {Array} The random sample
+ *
+ * Copied from https://stackoverflow.com/questions/11935175/sampling-a-random-subset-from-an-array
+ */
+function getRandomSubarray(arr, size) {
+    var n = Math.min(size, arr.length);
+
+    var shuffled = arr.slice(0), i = arr.length, temp, index;
+    while (i--) {
+        index = Math.floor((i + 1) * Math.random());
+        temp = shuffled[index];
+        shuffled[index] = shuffled[i];
+        shuffled[i] = temp;
+    }
+    return shuffled.slice(0, n);
+}
+
+/**
+ * Creates an object
+ * @param friends
+ */
+function friendsSplitByYear(friends) {
+    let intermed = {};
+    let out = [];
+    friends.forEach((item) => {
+       let date = new Date(item[timestamp] * 1000);
+       if (intermed.hasOwnProperty(date.getFullYear().toString())) {
+           intermed[date.getFullYear().toString()].push(item[name]);
+       } else {
+           intermed[date.getFullYear().toString()] = [item[name]];
+       }
+    });
+
+    Object.keys(intermed).forEach((year) => {
+        out.push({"year": +year, "count": intermed[year].length});
+    });
+
+    return out.sort((a, b) => {
+        return b.year - a.year;
+    });
 }

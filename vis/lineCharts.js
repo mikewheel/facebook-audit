@@ -14,16 +14,20 @@
  * @param title title of the chart
  * @param dataObject The data object
  */
-function timeSeriesLineChart(id, data, title) {
+function timeSeriesLineChart(id, data, colors, title) {
+
+    let width = 600;
+    let height = 400;
+
+    let svg = d3.select(document.createElementNS(svgNS, "svg"));
+
+    svg.attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .classed("svg-content-responsive", true)
+        .attr("_initWidth", width)
+        .attr("_initHeight", height);
 
     let keys = Object.keys(data);
-    let colors = [
-        "rgb(255, 0, 0)",
-        "rgb(0, 255, 0)",
-        "rgb(0, 0, 255)",
-        "rgb(255, 0, 255)",
-        "rgb(0, 255, 255)"
-    ];
 
     // Sort input data
     keys = keys.sort((k1, k2) => {
@@ -54,29 +58,24 @@ function timeSeriesLineChart(id, data, title) {
     // Get range of dates
     let dateRange = d3.extent(allDates);
 
-    // Select and configure svg
-    const svg = d3.select('#' + id)
-        .attr("width", dimensions.width)
-        .attr("height", dimensions.height);
-
     // Function that scales time linearly along the x axis
     let x = d3.scaleTime()
         .domain(dateRange)
-        .range([dimensions.marginLeft, dimensions.width - dimensions.marginRight]);
+        .range([margin.left, width - margin.right]);
 
     // Function that scales quantities linearly along the y axis
     let y = d3.scaleLinear()
         .domain([0, d3.max(allValues)])
-        .range([dimensions.height - dimensions.marginBottom, dimensions.marginTop]);
+        .range([height - margin.bottom, margin.top]);
 
     // Function that adds attributes to create the x axis group
     let xAxis = g => g
-        .attr("transform", `translate(0, ${dimensions.height - dimensions.marginBottom})`)
+        .attr("transform", `translate(0, ${height - margin.bottom})`)
         .call(d3.axisBottom(x).ticks(10).tickSizeOuter(0));
 
     // Function that adds attributes to create the y axis group
     let yAxis = g => g
-        .attr("transform", `translate(${dimensions.marginLeft}, 0)`)
+        .attr("transform", `translate(${margin.left}, 0)`)
         .call(d3.axisLeft(y))
         .call(g => g.select(".domain").remove())
         .call(g => g.select(".tick:last-of-type text").clone()
@@ -105,14 +104,14 @@ function timeSeriesLineChart(id, data, title) {
 
     // Add title text
     svg.append("text")
-        .attr("x", dimensions.width / 2)
-        .attr("y", (dimensions.marginTop / 2))
+        .attr("x", width / 2)
+        .attr("y", (margin.top / 2))
         .attr("text-anchor", "middle")
         .style("font-size", "20px")
         .style("font-family", "Helvetica")
         .text(title);
 
-    const radius = 10;
+    const radius = 5;
 
     keys.forEach((key, index) => {
         let lineGroup = svg.append("g");
@@ -123,6 +122,7 @@ function timeSeriesLineChart(id, data, title) {
             .attr("fill", "none")
             .attr("stroke", colors[index])
             .attr("stroke-width", 1.5)
+            .attr("stroke-opacity", 0.8)
             .attr("stroke-linejoin", "round")
             .attr("stroke-linecap", "round")
             .attr("d", line);
@@ -136,4 +136,6 @@ function timeSeriesLineChart(id, data, title) {
             .attr("cx", d => x(d[0]))
             .attr("cy", d => y(d[1]))
     });
+
+    return svg.node();
 }
