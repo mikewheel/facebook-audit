@@ -41,43 +41,77 @@ function create_visuals(e) {
 
     // SRS of advertisers
     visuals.push({
-      "advertisers-srs": SRSVisual(getRandomSubarray(parsedData["targeting_advertisers"], 12), 4)
+      "ad-category-srs": SRSVisual(getRandomSubarray(parsedData["targeting_advertisers"], 12), 4)
     });
 
     visuals.push({
-      "friends-made-each-year": ordinalBarChart(friendsSplitByYear(parsedData["friends"]), "year", "count",
+      "apps-srs": SRSVisual(getRandomSubarray(parsedData["apps"], 9), 3)
+    });
+
+    visuals.push({
+      "event-attendance": ordinalBarChart([{
+        "status": "Accepted",
+        "count": parsedData["events"]["accepted"].length
+      },
+        {
+          "status": "Declined",
+          "count": parsedData["events"]["declined"].length
+        },
+        {
+          "status": "Hosted",
+          "count": parsedData["events"]["hosted"].length
+        },
+        {
+          "status": "Interested",
+          "count": parsedData["events"]["interested"].length
+        }],
+          "status",
+          "count",
+          FAKEBOOKBLUE,
+          "",
+          "",
+          "",
+          false)
+    });
+
+    visuals.push({
+      "messages-srs": SRSVisual(getRandomSubarray(parsedData["messages"], 12).map(d => d.content),
+          4)
+    });
+
+    visuals.push({
+      "friends-over-time": ordinalBarChart(friendsSplitByYear(parsedData["friends"]), "year", "count",
           FAKEBOOKBLUE, "", "","", false)
     });
 
     visuals.push({
-      "apps": bigStatistic("NUMBER OF APPS YOU HAVE LINKED TO FACEBOOK",
+      "apps-count": bigStatistic("NUMBER OF APPS YOU HAVE LINKED TO FACEBOOK",
           parsedData["apps"].length)
     });
 
     visuals.push({
-      "friends": bigStatistic("friends",
+      "friends-counts": bigStatistic("friends",
           parsedData["friends"].length,
           FAKEBOOKBLUE,
           false)
     });
 
     visuals.push({
-      "reactions": bigStatistic("reactions to posts",
+      "reactions-count": bigStatistic("reactions to posts",
           parsedData["reactions"].length,
           FACEBOOKBLUE,
           false)
     });
 
-
-    visuals.push([
-      "posts": bigStatistic("posts",
+    visuals.push({
+      "posts-count": bigStatistic("posts",
           parsedData["posts"].length,
           FACEBOOKBLUE,
           false)
-    ]);
+    });
 
     visuals.push({
-      "comments": bigStatistic("comments on posts",
+      "comments-count": bigStatistic("comments on posts",
           parsedData["comments"].length,
           false)
     });

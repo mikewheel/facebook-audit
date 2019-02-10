@@ -121,7 +121,8 @@ function addBorder(svg) {
 
 
 /**
- * Gets a random subarray of the given array of the given size
+ * Gets a random subarray of the given array of the given size.
+ * If size is greater than length then it returns a shuffled copy of the array
  * @param arr The array to sample
  * @param size The size of the sample
  * @returns {Array} The random sample
@@ -129,6 +130,8 @@ function addBorder(svg) {
  * Copied from https://stackoverflow.com/questions/11935175/sampling-a-random-subset-from-an-array
  */
 function getRandomSubarray(arr, size) {
+    var n = Math.min(size, arr.length);
+
     var shuffled = arr.slice(0), i = arr.length, temp, index;
     while (i--) {
         index = Math.floor((i + 1) * Math.random());
@@ -136,7 +139,7 @@ function getRandomSubarray(arr, size) {
         shuffled[index] = shuffled[i];
         shuffled[i] = temp;
     }
-    return shuffled.slice(0, size);
+    return shuffled.slice(0, n);
 }
 
 /**
