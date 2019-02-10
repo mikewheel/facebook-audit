@@ -37,7 +37,7 @@ function blankSVG() {
  * @param numberOnRight By default the text is rendered to the left and the number to the right. Set this to false to
  *   invert it.
  */
-function bigStatistic(text, number, numColor, numberOnRight=true) {
+function bigStatistic(text, number, numColor="#4267b2", numberOnRight=true) {
     let div = d3.select(document.createElement("div"));
 
     div.classed("d-flex", true)
@@ -49,7 +49,7 @@ function bigStatistic(text, number, numColor, numberOnRight=true) {
     div.append("p")
         .text(number)
         .style("font-size", "3em")
-        .style("color", "#4267b2");
+        .style("color", numColor);
 
 
     return div.node();

@@ -28,7 +28,7 @@ function create_visuals(e) {
     visuals.push({
       "dollars-per-user": bigStatistic("Facebook thinks your privacy is worth",
           "$24.96",
-          FAKEBOOKBLUE)
+          "#216c2a")
     });
 
     visuals.push({
