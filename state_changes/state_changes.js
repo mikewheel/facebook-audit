@@ -11,8 +11,7 @@ function displayLoadingPage(e) {
       <div class="d-flex align-items-center flex-column">
         <h1>Please be patient.</h1>
         <div>
-          <iframe src="https://giphy.com/embed/131tNuGktpXGhy" width="100px" height="100px"
-                  frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+          <img src="static/loading.gif" alt="loading icon" width="100px" height="100px"/>
         </div>
         <p>
           We put your privacy first, so none of your data ever reaches us. This means that your browser will
