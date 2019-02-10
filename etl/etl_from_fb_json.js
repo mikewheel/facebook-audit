@@ -9,8 +9,6 @@
 function etl(e) {
     try {
         let rawData = e.detail;
-        console.log(e);
-        console.log(rawData);
         var detail = {
             "ads": parse_ads(rawData["ads"]),
             "apps": parse_apps(rawData["apps_and_websites"]),
@@ -43,7 +41,6 @@ function get(data, args) {
             return []
         }
     });
-    console.log(intermed)
     return intermed;
 }
 
