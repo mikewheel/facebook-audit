@@ -38,92 +38,92 @@ function displayVizPage(e) {
 
         
         <div class="row">
-          <div class="col-12" id="ad-category-srs">
-            <div class="svg-container"></div>
+          <div class="col-12" >
+            <div class="svg-container" id="ad-category-srs"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="time-on-platform">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="time-on-platform"></div>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-12" id="reactions-count">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="reactions-count"></div>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-12" id="comments-count">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="comments-count"></div>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-12" id="posts-count">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="posts-count"></div>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-12" id="messages-count">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="messages-count"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="messages-srs">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="messages-srs"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="friends-count">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="friends-count"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="friends-over-time">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="friends-over-time"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="apps-count">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="apps-count"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="apps-srs">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="apps-srs"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="group-membership-count">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="group-membership-count"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="event-attendance">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="event-attendance"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="former-friends">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="former-friends"></div>
           </div>
         </div>
         
         <div class="row">
-          <div class="col-12" id="rejected-friend-requests">
-            <div class="svg-container"></div>
+          <div class="col-12">
+            <div class="svg-container" id="rejected-friend-requests"></div>
           </div>
         </div>
         

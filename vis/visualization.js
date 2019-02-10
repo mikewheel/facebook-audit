@@ -19,10 +19,9 @@ function create_visuals(e) {
 
 
     // CREATING THE VISUALIZATIONS
-
     visuals.push({
       "time-on-platform": bigStatistic("You have been giving Facebook data since",
-          new Date(parsedData["profile_information"]["registration_timestamp"] * 1000).toString(),
+          new Date(parsedData["profile_information"]["profile"]["registration_timestamp"] * 1000).toDateString(),
           FAKEBOOKBLUE)
     });
 
@@ -61,9 +60,6 @@ function create_visuals(e) {
           parsedData["friends"]["requests_you_rejected"].length,
           FAKEBOOKBLUE)
     });
-
-
-    // TODO: ACTUALLY CREATE VISUALS
 
     // SRS of advertisers
     visuals.push({

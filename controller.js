@@ -26,5 +26,4 @@ function main() {
 
 }
 
-// TODO -- only run main() when the browser says it's ready
 main();
