@@ -1,5 +1,42 @@
+html, body {
+    min-height: 100vh;
+}
+
+header, footer {
+    background-color: dodgerblue;
+    color: white;
+    width: 100%;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+footer a {
+    color: white;
+}
+
 svg.viz {
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+
+/* from https://stackoverflow.com/questions/16265123/resize-svg-when-window-is-resized-in-d3-js */
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content-responsive {
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
