@@ -7,9 +7,8 @@ zip.workerScriptsPath = "../upload/lib/";
 let filePicker = document.getElementById("file-picker");
 
 // The function to call on the data, once it's loaded
-var vizData = null;
 let dataCallback = function (d) {
-  parsedData = etl(d);
+  var parsedData = etl(d);
   console.dir(parsedData);
   //renderVisualizations(vizData);
 };
@@ -31,7 +30,6 @@ filePicker.addEventListener('change', function () {
 
                     let JSONEntries = [];  // List to contain only the JSON entries
                     let completedJSON = 0;  // Counter for the number of JSON that we've completed
-                    let numCompletions = 0;  // This lets us check that the all-complete condition is met only once
 
                     // First pull out all the JSON entries in the zip file and store them in a separate list
                     for (let i = 0; i < entries.length; i++) {
@@ -81,7 +79,6 @@ filePicker.addEventListener('change', function () {
 
                                 completedJSON++;
                                 if (completedJSON === JSONEntries.length) {
-                                    numCompletions++;
                                     // console.log("COMPLETE!!!", completedJSON, "out of", JSONEntries.length, "(",
                                     //     numCompletions, ")");
                                     dataCallback(filenameJsonMap);
