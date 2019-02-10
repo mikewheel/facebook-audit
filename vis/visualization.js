@@ -162,7 +162,7 @@ let exampleData = [
 function render() {
 
   // Render
-  let svg = ordinalBarChart(
+  /*let svg = ordinalBarChart(
       exampleData,
       "year",
       "numFriends",
@@ -172,7 +172,33 @@ function render() {
       titleY="",
       legend = false);
   document.getElementById("insert").appendChild(svg); // This div must also be classed with svg-container
+*/
 
+  let svg = ordinalBarChart([{
+        "status": "Accepted",
+        "count": parsedData["events"]["accepted"].length
+      },
+        {
+          "status": "Declined",
+          "count": parsedData["events"]["declined"].length
+        },
+        {
+          "status": "Hosted",
+          "count": parsedData["events"]["hosted"].length
+        },
+        {
+          "status": "Interested",
+          "count": parsedData["events"]["interested"].length
+        }],
+      "status",
+      "count",
+      FAKEBOOKBLUE,
+      "",
+      "",
+      "",
+      false);
+
+  document.getElementById("insert").appendChild(svg);
 
 /*
   let svg = addBorder(bigStatistic("NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin, 600, 100));
