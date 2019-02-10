@@ -107,33 +107,33 @@ function create_visuals(e) {
     });
 
     visuals.push({
-      "apps-count": bigStatistic("NUMBER OF APPS YOU HAVE LINKED TO FACEBOOK",
+      "apps-count": bigStatistic("Number of apps linked to Facebook",
           parsedData["apps"].length)
     });
 
     visuals.push({
-      "friends-count": bigStatistic("friends",
+      "friends-count": bigStatistic("Number of friends",
           parsedData["friends"]["friends"].length,
           FAKEBOOKBLUE,
           false)
     });
 
     visuals.push({
-      "reactions-count": bigStatistic("reactions to posts",
+      "reactions-count": bigStatistic("Reactions to posts",
           parsedData["reactions"]["posts_and_comments"].length + parsedData["reactions"]["pages"].length,
           FAKEBOOKBLUE,
           false)
     });
 
     visuals.push({
-      "posts-count": bigStatistic("posts",
+      "posts-count": bigStatistic("Number of posts",
           parsedData["posts"].length,
           FAKEBOOKBLUE,
           false)
     });
 
     visuals.push({
-      "comments-count": bigStatistic("comments on posts",
+      "comments-count": bigStatistic("Comments on posts",
           parsedData["comments"].length,
           false)
     });
