@@ -163,6 +163,6 @@ function friendsSplitByYear(friends) {
     });
 
     return out.sort((a, b) => {
-        return b.year - a.year;
+        return a.year - b.year;
     });
 }

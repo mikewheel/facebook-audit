@@ -22,7 +22,7 @@ function calculateBarChartXs(n, total, rectWidth, graphWidth, margin) {
 /**
  * Constructs a bar chart visualization with the given data, header and titles.
  * The independent column is assumed to be a list of text labels, and the dependent column is assumed to be numbers
- * @param data Data here is assumed to be an array of objects of the form { colX: x, colY: y }
+ * @param data Data here is assumed to be an array of objects of the form [{ colX: x, colY: y },...]
  * @param colX The column that is the independent variable
  * @param colY The column that is the dependent variable
  * @param color Color of the rectangles
@@ -58,14 +58,18 @@ function ordinalBarChart(data, colX, colY, color, header, titleX = "", titleY = 
     let numBars = data.length;
 
     // Tune as necessary or parameterize
-    let rectWidth = 100;
+    let rectWidth = 50;
 
     let padding = 30;
+    console.log("GRAPHWIDTH", graphWidth);
 
     // Construct the graph
-    let x = d3.scalePoint()
+    let x = d3.scaleOrdinal()
         .domain(data.map(d => d[colX]))
-        .range(natRange(numBars).map(d => calculateBarChartXs(d, numBars, rectWidth, graphWidth, margin)));
+        .range(natRange(numBars).map(d => {
+            console.log(calculateBarChartXs(d, numBars, rectWidth, graphWidth, margin));
+            return calculateBarChartXs(d, numBars, rectWidth, graphWidth, margin);
+        }));
     //.range([margin.left, graphWidth + margin.left - rectWidth - padding]);
 
     let y = d3.scaleLinear()
