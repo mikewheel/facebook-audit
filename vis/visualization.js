@@ -1,30 +1,52 @@
 /**
  * visualization.js
- * Author: Sam Xifaras
- *
  * This file exposes functions for visualizing statistics derived from Facebook data
  */
 
-/*
- * Data format expected by this file:
- * Array of objects of key value pairs.
- * For example:
- * To visualize FB friends each year as a bar chart, the data should look like this:
- */
 
-// Constants
 const FAKEBOOKBLUE = "#4267b2";
 const svgNS = "http://www.w3.org/2000/svg";
 
-let exampleData = [
-  {
-    "year" : 2014,
-    "numFriends" : 204
-  },
-  {
-    "year" : 2015,
-    "numFriends" : 214
+/**
+ * Converts the parsed data from etl function to several visualization-specific JavaScript objects.
+ * @param e The event from the completion of parsing the data (etl-complete).
+ */
+function create_visuals(e) {
+  try {
+    let parsedData = e.detail;
+    console.dir(parsedData);
+    var visuals = []; // to be inserted directly in the page, format: [{id: dom}, ...]
+
+
+    // CREATING THE VISUALIZATIONS
+    visuals.push({
+      "num-advertisers": bigStatistic("Number of advertisers individually targeting you",
+          parsedData["targeting_advertisers"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push()
+
+    // TODO: ACTUALLY CREATE VISUALS
+
+    let event = new CustomEvent("visuals-created", { detail: visuals });
+    document.dispatchEvent(event);
+  } catch (error) {
+    let errorEvent = new CustomEvent("error-triggered", { detail: "Error creating graphics!" });
+    document.dispatchEvent(errorEvent);
+    console.log(JSON.stringify(error));
   }
+}
+
+let exampleData = [
+    {
+      "year" : 2014,
+      "numFriends" : 204
+    },
+    {
+      "year" : 2015,
+      "numFriends" : 214
+    }
 ];
 
 function render() {

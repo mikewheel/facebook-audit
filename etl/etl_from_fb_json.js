@@ -5,7 +5,6 @@
  * Converts the given files into usable json. The output format is a mapping from visualization names
  * to the rawData that the visualization needs, in the format that the visualization needs.
  * @param e the CustomEvent that is emitted by the unzip function.
- * @return a mapping from rawData viz name to rawData, or false if an error occurred
  */
 function etl(e) {
     try {
