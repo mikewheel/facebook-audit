@@ -16,7 +16,7 @@
   <h3>Facebook Audit</h3>
 </header>
 
-<main>
+<main id="main">
   <h1>Upload your zip file here:</h1>
   <form>
     <input type="file" id="file-picker" accept=".zip, application/zip"/>
@@ -36,6 +36,7 @@
 <!-- App-specific imports -->
 <script src="upload/load_facebook_data.js" type="text/javascript"></script>
 <script src="etl/etl_from_fb_json.js" type="text/javascript"></script>
+<script src="state_changes/state_changes.js" type="text/javascript"></script>
 <script src="controller.js"></script>
 </body>
 </html>

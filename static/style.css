@@ -1,61 +1,29 @@
-html {
-    margin: 0px;
-    padding: 0px;
-    height:100%;
+html, body {
+    min-height: 100vh;
 }
 
-body {
-    font-family: Helvetica;
-    margin: 0px;
-    padding: 0px;
-    background-color: #f0f0f0;
-    height:100%;
-}
-
-#content-wrapper {
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    height: 100%;
-    background-color: white;
-}
-
-#content {
-    padding-top: 50px;
-}
-
-.centered {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-}
-
-.centered-inline-block {
-    margin-left: auto;
-    margin-right: auto;
-    display: inline-block;
-}
-
-.section {
+header, footer {
+    background-color: dodgerblue;
+    color: white;
     width: 100%;
-    display: block;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
     text-align: center;
-
+    font-size: 1.2em;
 }
 
-h1 {
-    display:inline;
+footer a {
+    color: white;
 }
 
-/*
-svg {
+svg.viz {
     margin-left: auto;
     margin-right: auto;
     display: block;
 }
-*/
-
 
 /* from https://stackoverflow.com/questions/16265123/resize-svg-when-window-is-resized-in-d3-js */
 .svg-container {
