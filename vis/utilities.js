@@ -87,3 +87,17 @@ function natRange(n) {
     if (n == 0) return [];
     else return natRange(n - 1).concat([n - 1]);
 }
+
+function addBorder(svg) {
+    let width = svg.attr("width");
+    let height = svg.attr("height");
+
+    svg.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill-opacity", 0.0)
+        //.attr("fill", FAKEBOOKBLUE)
+        .attr("stroke", "black");
+}

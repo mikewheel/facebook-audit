@@ -129,4 +129,6 @@ function ordinalBarChart(id, data, colX, colY, header, width, height, margin, ti
         let legendG = svg.append("g");
         constructLegend(legendG, legendWidth, [colX], ["lightblue"], margin, width * graphWidthRatio, 0);
     }
+
+    return svg;
 }

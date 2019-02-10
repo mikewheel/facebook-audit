@@ -43,6 +43,8 @@ function bigStatistic(id, text, number, numColor, margin) {
         .attr("font-size", 40)
         .attr("font-weight", "bold")
         .attr("fill", numColor);
+
+    return svg;
 }
 
 
@@ -57,7 +59,7 @@ function SRSVisual(id, data, margin, numColumns) {
     let padding = 10;
     let svg = d3.select("#" + id);
 
-    let fontSize = 16;
+    let fontSize = 20;
 
     let width = svg.attr("width");
     let height = svg.attr("height");
@@ -83,13 +85,20 @@ function SRSVisual(id, data, margin, numColumns) {
         .attr("x", (d, i) => x(i % numColumns))
         .attr("y", (d, i) => y(Math.floor(i / numColumns)))
         .style("opacity", 0.0)
-        .style("font-size", 20)
+        .attr("font-size", 0)
         .attr("fill", "black")
         .attr("text-anchor", "middle")
         .text(d => d)
-        .transition()
+        //.call(wrap, columnWidth) TODO: Find out how to do text wrapping
+        .transition("opacity")
+        .duration(500)
+        .delay((d, i) => i * 100)
+        .style("opacity", 1.0)
+        .transition("fontSize")
+        .ease(d3.easeBounce)
         .duration(1000)
         .delay((d, i) => i * 100)
-        .style("opacity", 1.0);
-        //.style("font-size", fontSize);
+        .attr("font-size", fontSize);
+
+    return svg;
 }

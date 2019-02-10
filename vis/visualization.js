@@ -12,6 +12,9 @@
  * To visualize FB friends each year as a bar chart, the data should look like this:
  */
 
+
+const FAKEBOOKBLUE = "#4267b2";
+
 let exampleData = [
   {
     "year" : 2014,
@@ -54,7 +57,7 @@ function render() {
 
   //bigStatistic("stat-ads", "NUMBER OF ADVERTISERS TARGETING YOU", 1040, "#4267b2", margin);
 
-  SRSVisual("stat-ads", ["hello", "world", "this", "is", "a", "test"], margin, 4);
+  addBorder(SRSVisual("stat-ads", ["hello", "world", "this", "is", "a", "test"], margin, 4));
 }
 
 
