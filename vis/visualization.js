@@ -19,23 +19,49 @@ function create_visuals(e) {
 
 
     // CREATING THE VISUALIZATIONS
+
     visuals.push({
-      "num-advertisers": bigStatistic("Number of advertisers individually targeting you",
+      "time-on-platform": bigStatistic("You have been giving Facebook data since",
+          new Date(parsedData["profile_information"]["registration_timestamp"] * 1000).toString(),
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "advertisers-count": bigStatistic("Number of advertisers individually targeting you",
           parsedData["targeting_advertisers"].length,
           FAKEBOOKBLUE)
     });
 
     visuals.push({
-      "ad-interest": bigStatistic("Facebook has guessed your especially likely to click ads in this many groups",
+      "ad-category-count": bigStatistic("Facebook thinks you are likely to click ads in this many areas",
           parsedData["ad_interests"].length,
           FAKEBOOKBLUE)
     });
 
     visuals.push({
-      "ad-interest": bigStatistic("Facebook has guessed your especially likely to click ads in this many groups",
-          parsedData["ad_interests"].length,
+      "messages-count": bigStatistic("You have sent this many messages, Facebook saves the content of each",
+          parsedData["messages"].length,
           FAKEBOOKBLUE)
     });
+
+    visuals.push({
+      "group-membership-count": bigStatistic("You are a member of this many groups, each of them has associated stored info",
+          parsedData["groups"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "former-friends": bigStatistic("I don't know what they did to piss you off, but you unfriended this many people",
+          parsedData["friends"]["former_friends"].length,
+          FAKEBOOKBLUE)
+    });
+
+    visuals.push({
+      "rejected-friend-requests": bigStatistic("Too good to add these people? Number of rejected friend requests",
+          parsedData["friends"]["requests-you-rejected"].length,
+          FAKEBOOKBLUE)
+    });
+
 
     // TODO: ACTUALLY CREATE VISUALS
 
