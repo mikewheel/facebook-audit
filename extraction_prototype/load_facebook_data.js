@@ -10,7 +10,11 @@ let filePicker = document.getElementById("file-picker");
 var vizData = null;
 let dataCallback = function (d) {
   vizData = etl(d);
-  renderVisualizations(vizData)
+  renderVisualizations(vizData);
+};
+
+let indexedDBCallback = function (d) {
+    insertIntoIndexedDB(d);
 };
 
 filePicker.addEventListener('change', function () {
@@ -51,43 +55,51 @@ filePicker.addEventListener('change', function () {
                     for (let i = 0; i < JSONEntries.length; i++) {
                         let entry = JSONEntries[i];
 
-                        // Set up the "dirForFile" object, so we can store JSON in there with the callback
+                        // Generate an array of filepath components by splitting on slash
                         const path = entry.filename.split("/");
-                        // all but last element, last element respectively
-                        const directories = path.slice(0, -1);
+                        // Then filename is the last item in that list
                         const filename = path[path.length - 1];
+                        // And directory structure is everything that comes before
+                        const directoryNames = path.slice(0, -1);
 
                         // Get the raw data from the selected zip entries
                         entry.getData(new zip.TextWriter(),
                             function (text) {
-                                console.log(entry.filename, ": contents acquired!");
+                                // console.log(entry.filename, ": contents acquired!");
 
-                                let pathSoFar = [];
                                 // this will be the dictionary in dirPart that
                                 // corresponds to the directory the file is in
                                 let dirPart = filenameJsonMap;
-                                for (const dir of directories) {
+
+                                // For each directory leading up to the filename
+                                for (const dir of directoryNames) {
+                                    // Ensure there's an object at the key for that directory
                                     dirPart[dir] = dirPart[dir] || {};
+                                    // And then move down the directory tree
                                     dirPart = dirPart[dir];
                                 }
+                                // By this point we've reached the location where the file contents should go
+                                // So parse the JSON from the file and store it there
                                 dirPart[filename] = JSON.parse(text);
 
                                 completedJSON++;
                                 if (completedJSON === JSONEntries.length) {
                                     numCompletions++;
-                                    console.log("COMPLETE!!!", completedJSON, "out of", JSONEntries.length, "(",
-                                        numCompletions, ")");
-                                    dataCallback(filenameJsonMap);
+                                    // console.log("COMPLETE!!!", completedJSON, "out of", JSONEntries.length, "(",
+                                    //     numCompletions, ")");
+                                    indexedDBCallback(filenameJsonMap);
+                                    //dataCallback(filenameJsonMap);
                                 }
 
                             }, function (current, total) {
                                 // Used to measure progress of getting data from zip entries
                                 // Here we write percents to console.
-                                let percent_progress = Math.floor((100 * current) / total);
-                                if (percent_progress % 20 === 0) {
-                                    console.log(entry.filename, ": Progress is ", percent_progress, "% (",
-                                        current, " out of ", total, ")");
-                                }
+                                // let percent_progress = Math.floor((100 * current) / total);
+                                // if (percent_progress % 20 === 0) {
+                                //     console.log(entry.filename, ": Progress is ", percent_progress, "% (",
+                                //         current, " out of ", total, ")");
+                                // }
+                                return;
                             }
                         );
                     }
