@@ -28,19 +28,14 @@ function displayLoadingPage(e) {
  * Displays the visualization page to be shown after loading is complete.
  */
 function displayVizPage(e) {
+    let visuals = e.detail;
+
     eraseMain();
     let main = document.getElementById("main");
-    let vizTemplateHTML = `<div class="row">
-          <div class="col-12" id="advertisers-count">
-            <div class="svg-container"></div>
-          </div>
-        </div>
+    let vizTemplateHTML = `
+        <div class="svg-container" id="advertisers-count"></div>
+        <div class="svg-container" id="ad-category-count"></div>
 
-        <div class="row">
-          <div class="col-12" id="ad-category-count">
-            <div class="svg-container"></div>
-          </div>
-        </div>
         
         <div class="row">
           <div class="col-12" id="ad-category-srs">
@@ -91,6 +86,12 @@ function displayVizPage(e) {
         </div>
         
         <div class="row">
+          <div class="col-12" id="friends-over-time">
+            <div class="svg-container"></div>
+          </div>
+        </div>
+        
+        <div class="row">
           <div class="col-12" id="apps-count">
             <div class="svg-container"></div>
           </div>
@@ -132,9 +133,17 @@ function displayVizPage(e) {
             <p>Created by  Daniel Rassaby, Sam Xifaras, Michael Wheeler, and Julian Zucker</p>
           </div>
         </div>`;
-
     main.innerHTML = vizTemplateHTML;
-    // TODO -- inject the D3 by IDs
+
+    window.setTimeout(function() {
+        visuals.forEach(function(vizObject) {
+            let htmlID = Object.keys(vizObject)[0];
+            let node = vizObject[htmlID];
+            console.log(htmlID);
+            document.getElementById(htmlID).appendChild(node);
+        })
+    }, 500);
+
 }
 
 /**

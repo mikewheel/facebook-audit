@@ -5,8 +5,9 @@
 function handle_error(e) {
     let errorText = e.detail;
     console.log(errorText);
-    // TODO -- display an alert describing the nature of the error
-    // TODO -- trigger reload of page
+    // Display an alert describing the nature of the error
+    alert(errorText);
+    location.reload();
 }
 
 /**
@@ -21,8 +22,7 @@ function main() {
     filePicker.addEventListener('change', displayLoadingPage); // File uploaded -> display loading screen
     document.addEventListener('unzip-complete', etl); // Unzip complete -> prune and extract
     document.addEventListener('etl-complete', create_visuals); // Extraction complete -> create visualizations
-    // document.addEventListener('viz-data-ready', switchToVizScreen); // Signatures met -> display empty viz screen
-    document.addEventListener('viz-data-ready', displayVizPage); // Signatures met -> display the viz screen
+    document.addEventListener('visuals-created', displayVizPage); // Signatures met -> display the viz screen
 
 }
 

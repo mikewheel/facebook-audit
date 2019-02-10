@@ -116,7 +116,7 @@ function create_visuals(e) {
     });
 
     visuals.push({
-      "friends-counts": bigStatistic("friends",
+      "friends-count": bigStatistic("friends",
           parsedData["friends"]["friends"].length,
           FAKEBOOKBLUE,
           false)
