@@ -2,8 +2,8 @@
  * Allows the webpage to accept and decompress a zip file of Facebook data, recognize the JSON files and read them using
  * JSON.parse(), and then compile all the resulting JSON objects into a single object for export.
  */
-zip.workerScriptsPath = "./lib/";
 
+zip.workerScriptsPath = "./lib/";
 
 /**
  * Unzips the data from the uploaded zip file.
@@ -12,7 +12,6 @@ zip.workerScriptsPath = "./lib/";
 function unzipFBData(e) {
 
     let filePicker = e.target;
-
 
     // First extract the File object from the input form field
     let zipFileBlob = filePicker.files[0];
