@@ -150,7 +150,7 @@ function friendsSplitByYear(friends) {
     let intermed = {};
     let out = [];
     friends.forEach((item) => {
-       let date = new Date(item[timestamp] * 1000);
+       let date = new Date(item["timestamp"] * 1000);
        if (intermed.hasOwnProperty(date.getFullYear().toString())) {
            intermed[date.getFullYear().toString()].push(item[name]);
        } else {

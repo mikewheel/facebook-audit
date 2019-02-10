@@ -62,7 +62,7 @@ function bigStatistic(text, number, numColor, numberOnRight=true) {
         .text(number.toString())
         .attr("x", numberOnRight ? width - margin.right : margin.left)
         .attr("y", height / 2)
-        .attr("text-anchor", numberOnRight ? "end" : start)
+        .attr("text-anchor", numberOnRight ? "end" : "start")
         .attr("dominant-baseline", "central")
         .attr("font-size", 40)
         .attr("font-weight", "bold")

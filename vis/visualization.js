@@ -28,13 +28,13 @@ function create_visuals(e) {
 
     visuals.push({
       "advertisers-count": bigStatistic("Number of advertisers individually targeting you",
-          parsedData["targeting_advertisers"].length,
+          parsedData["ads"]["targeting_advertisers"].length,
           FAKEBOOKBLUE)
     });
 
     visuals.push({
       "ad-category-count": bigStatistic("Facebook thinks you are likely to click ads in this many areas",
-          parsedData["ad_interests"].length,
+          parsedData["ads"]["ad_interests"].length,
           FAKEBOOKBLUE)
     });
 
@@ -46,7 +46,7 @@ function create_visuals(e) {
 
     visuals.push({
       "group-membership-count": bigStatistic("You are a member of this many groups, each of them has associated stored info",
-          parsedData["groups"].length,
+          parsedData["groups"]["group_memberships"].length,
           FAKEBOOKBLUE)
     });
 
@@ -58,7 +58,7 @@ function create_visuals(e) {
 
     visuals.push({
       "rejected-friend-requests": bigStatistic("Too good to add these people? Number of rejected friend requests",
-          parsedData["friends"]["requests-you-rejected"].length,
+          parsedData["friends"]["requests_you_rejected"].length,
           FAKEBOOKBLUE)
     });
 
@@ -67,7 +67,7 @@ function create_visuals(e) {
 
     // SRS of advertisers
     visuals.push({
-      "ad-category-srs": SRSVisual(getRandomSubarray(parsedData["targeting_advertisers"], 12), 4)
+      "ad-category-srs": SRSVisual(getRandomSubarray(parsedData["ads"]["targeting_advertisers"], 12), 4)
     });
 
     visuals.push({
@@ -106,7 +106,7 @@ function create_visuals(e) {
     });
 
     visuals.push({
-      "friends-over-time": ordinalBarChart(friendsSplitByYear(parsedData["friends"]), "year", "count",
+      "friends-over-time": ordinalBarChart(friendsSplitByYear(parsedData["friends"]["friends"]), "year", "count",
           FAKEBOOKBLUE, "", "","", false)
     });
 
@@ -117,22 +117,22 @@ function create_visuals(e) {
 
     visuals.push({
       "friends-counts": bigStatistic("friends",
-          parsedData["friends"].length,
+          parsedData["friends"]["friends"].length,
           FAKEBOOKBLUE,
           false)
     });
 
     visuals.push({
       "reactions-count": bigStatistic("reactions to posts",
-          parsedData["reactions"].length,
-          FACEBOOKBLUE,
+          parsedData["reactions"]["posts_and_comments"].length + parsedData["reactions"]["pages"].length,
+          FAKEBOOKBLUE,
           false)
     });
 
     visuals.push({
       "posts-count": bigStatistic("posts",
           parsedData["posts"].length,
-          FACEBOOKBLUE,
+          FAKEBOOKBLUE,
           false)
     });
 
@@ -145,6 +145,7 @@ function create_visuals(e) {
     let event = new CustomEvent("visuals-created", { detail: visuals });
     document.dispatchEvent(event);
   } catch (error) {
+    throw error;
     let errorEvent = new CustomEvent("error-triggered", { detail: "Error creating graphics!" });
     document.dispatchEvent(errorEvent);
     console.log(JSON.stringify(error));
